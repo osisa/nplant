@@ -3,6 +3,8 @@ using System.Text;
 using NAnt.Core;
 using NPlant.Generation;
 
+using Task = NAnt.Core.Task;
+
 namespace NPlant.NAntTasks
 {
     public class NAntRunnerRecorder : IRunnerRecorder

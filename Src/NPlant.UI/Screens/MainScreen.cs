@@ -45,13 +45,8 @@ namespace NPlant.UI
 
             var tab = new FileViewTab(filePath, new ClassDiagramView(filePath));
 
-            tab.ContextMenu = new ContextMenu(new []{new MenuItem("Close", (sender, args) =>
-                {
-                    MenuItem item = (MenuItem) sender;
-                    FileViewTab t = (FileViewTab) item.Tag;
-                    RemoveFileView(t);
-                }){Tag = tab}
-            });
+            tab.ContextMenuStrip = new ContextMenuStrip();
+            tab.ContextMenuStrip.Items.Add(new ToolStripMenuItem("Close", Image.FromFile(filePath)) {Tag = tab});
 
             this.FileViewTabs.TabPages.Add(tab);
             this.FileViewTabs.SelectedTab = tab;

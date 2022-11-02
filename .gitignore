@@ -3,9 +3,6 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-**/AssemblyInfo.cs
-**/*.Generated.cs
-
 # User-specific files
 *.rsuser
 *.suo
@@ -363,14 +360,9 @@ MigrationBackup/
 output/
 
 !src/Lib/Sage/oneSage/*
+/.nuke
 
-**/packages.lock.json
-!**/.gitmodules
-
-!**/.nuke
-!.nuke/build.schema.json
-!.nuke/parameters.json
-/src/osisa.Smart.Web/elsa.sqlite.db-wal
-/src/osisa.Smart.Web/elsa.sqlite.db-shm
-/src/osisa.Smart.Web/elsa.sqlite.db
-
+# Exceptions for Intune/Autopilot
+!Microsoft.PackageManagement.NuGetProvider.dll
+!azuread.2.0.2.140.nupkg
+!windowsautopilotintune.5.0.0.nupkg
