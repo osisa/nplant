@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using NPlant.Tests.Readers;
 using NUnit.Framework;
+using NPlant.MetaModel.ClassDiagraming;
 
 namespace NPlant.Tests.ClassDiagrams
 {
     [TestFixture]
-    public class AggregationScenarios
+    public class AggregationScenariosTests
     {
         [Test]
         public void GIVEN_A_Simple_Single_Entity_Diagram_WHEN_Rendered_With_Defaults_THEN_Diagram_Has_One_Class_With_Members()
@@ -17,7 +18,7 @@ namespace NPlant.Tests.ClassDiagrams
             Assert.That(reader.Classes[0].Name, Is.EqualTo("AggregationEntity"));
         }
 
-        public class DefaultBehaviorDiagram : ClassDiagramDefinition
+        public class DefaultBehaviorDiagram : ClassDiagram
         {
             public DefaultBehaviorDiagram()
             {

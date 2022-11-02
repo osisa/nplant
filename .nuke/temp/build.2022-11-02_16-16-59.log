@@ -1,0 +1,37 @@
+V |                      | ArgumentsFromParametersFile.OnBuildCreated (150)
+V |                      | InjectParameterValues.OnBuildCreated (100)
+W |                      | Could not inject value for DefaultBuild.Solution
+System.ArgumentException: No solution file defined for 'Solution'.
+   at Nuke.Common.Assert.NotNull[T](T obj, String message, String argumentExpression) in /_/source/Nuke.Common/Assert.cs:line 61
+   at Nuke.Common.ProjectModel.SolutionAttribute.GetSolutionFileFromParametersFile(MemberInfo member) in /_/source/Nuke.Common/ProjectModel/SolutionAttribute.cs:line 84
+   at Nuke.Common.ProjectModel.SolutionAttribute.GetValue(MemberInfo member, Object instance) in /_/source/Nuke.Common/ProjectModel/SolutionAttribute.cs:line 54
+   at Nuke.Common.ValueInjection.ValueInjectionAttributeBase.TryGetValue(MemberInfo member, Object instance) in /_/source/Nuke.Common/ValueInjection/ValueInjectionAttributeBase.cs:line 25
+V |                      | HandleShellCompletion.OnBuildCreated (75)
+V |                      | GenerateBuildServerConfigurations.OnBuildCreated (50)
+V |                      | InvokeBuildServerConfigurationGeneration.OnBuildCreated (45)
+V |                      | UpdateNotification.OnBuildCreated (10)
+V |                      | UnsetVisualStudioEnvironmentVariables.OnBuildCreated (0)
+V |                      | HandleVisualStudioDebugging.OnBuildCreated (0)
+V |                      | HandleSingleFileExecution.OnBuildCreated (-50)
+V |                      | EventInvoker.OnBuildCreated (-3.4028235E+38)
+V |                      | Target-unrelated exception was thrown
+System.Exception: Target with name 'Nplant.sln' does not exist. Available targets are:
+  - Clean
+  - Compile
+  - Coverage
+  - MSIXDeploy
+  - Pack
+  - Ping
+  - Publish
+  - PublishAndDocs
+  - Restore
+  - Sonar
+  - Test
+  - Version
+   at Nuke.Common.Assert.Fail(String message, Exception exception) in /_/source/Nuke.Common/Assert.cs:line 22
+   at Nuke.Common.Execution.ExecutionPlanner.GetExecutableTarget(String targetName, IReadOnlyCollection`1 executableTargets) in /_/source/Nuke.Common/Execution/ExecutionPlanner.cs:line 108
+   at Nuke.Common.Execution.ExecutionPlanner.<>c__DisplayClass0_0.<GetExecutionPlan>b__0(String x) in /_/source/Nuke.Common/Execution/ExecutionPlanner.cs:line 25
+   at System.Linq.Enumerable.SelectArrayIterator`2.ToList()
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Nuke.Common.Execution.ExecutionPlanner.GetExecutionPlan(IReadOnlyCollection`1 executableTargets, IReadOnlyCollection`1 invokedTargetNames) in /_/source/Nuke.Common/Execution/ExecutionPlanner.cs:line 25
+   at Nuke.Common.Execution.BuildManager.Execute[T](Expression`1[] defaultTargetExpressions) in /_/source/Nuke.Common/Execution/BuildManager.cs:line 54

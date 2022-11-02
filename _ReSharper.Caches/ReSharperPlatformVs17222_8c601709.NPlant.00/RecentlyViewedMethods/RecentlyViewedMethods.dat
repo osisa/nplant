@@ -1,0 +1,13 @@
+﻿<RecentlyViewedMethods>
+  <RecentlyViewedMethods>
+    <RecentMethod id="b75ba5ee-848e-40a3-a428-f553ea3d37a8%28NPlant.UI%29-D919463A%5Bnet6.0-windows7.0%5D/M%3ANPlant.UI.Screens.Controls.ImageGenerationSummary.InitializeComponent" />
+    <RecentMethod id="b75ba5ee-848e-40a3-a428-f553ea3d37a8%28NPlant.UI%29-D919463A%5Bnet6.0-windows7.0%5D/M%3ANPlant.UI.FileViewTab.%23ctor%28System.String%2CNPlant.UI.FileView%29" />
+    <RecentMethod id="b75ba5ee-848e-40a3-a428-f553ea3d37a8%28NPlant.UI%29-D919463A%5Bnet6.0-windows7.0%5D/M%3ANPlant.UI.MainScreen.AddFileView%28NPlant.UI.FileViewType%2CSystem.String%29" />
+    <RecentMethod id="870ce431-3a6a-4b0c-b0ac-9c4a08608b30%28NPlant%29-C1541808%5Bnet6.0%5D/M%3ANPlant.Generation.NPlantDiagramLoader.InstantiateDiagramFactory%28System.Type%29" />
+    <RecentMethod id="870ce431-3a6a-4b0c-b0ac-9c4a08608b30%28NPlant%29-C1541808%5Bnet6.0%5D/P%3ANPlant.ClassDiagram.ShowMembersBindingFlags" />
+    <RecentMethod id="870ce431-3a6a-4b0c-b0ac-9c4a08608b30%28NPlant%29-C1541808%5Bnet6.0%5D/M%3ANPlant.MetaModel.ClassDiagraming.ClassDescriptor.LoadMembers%28NPlant.Generation.ClassDiagraming.ClassDiagramVisitorContext%29" />
+    <RecentMethod id="a8d56c11-cb5e-4af5-b3ac-917ed2ac3111%28NPlant.NAntTasks%29-BE97CE0F%5Bnet6.0%5D/M%3ANPlant.NAntTasks.NPlantTask.AssignLogLevel%28NAnt.Core.Level%29" />
+    <RecentMethod id="a8d56c11-cb5e-4af5-b3ac-917ed2ac3111%28NPlant.NAntTasks%29-BE97CE0F%5Bnet6.0%5D/P%3ANPlant.NAntTasks.NPlantTask.Property" />
+    <RecentMethod id="870ce431-3a6a-4b0c-b0ac-9c4a08608b30%28NPlant%29-C1541808%5Bnet6.0%5D/M%3AImageExtensionMethods.SaveNPlantImage%28System.Drawing.Image%2CSystem.String%2CSystem.String%29" />
+  </RecentlyViewedMethods>
+</RecentlyViewedMethods>

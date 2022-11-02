@@ -3,6 +3,8 @@ using NAnt.Core.Attributes;
 using NPlant.Core;
 using NPlant.Generation;
 
+using Task = NAnt.Core.Task;
+
 namespace NPlant.NAntTasks
 {
     [TaskName("nplant")]

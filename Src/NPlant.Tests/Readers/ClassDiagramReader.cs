@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using NPlant;
 
 namespace NPlant.Tests.Readers
 {
@@ -8,7 +9,7 @@ namespace NPlant.Tests.Readers
     {
         private readonly IList<ClassElement> _classes = new List<ClassElement>();
 
-        public static ClassDiagramReader Read(ClassDiagramDefinition diagram)
+        public static ClassDiagramReader Read(ClassDiagram diagram)
         {
             var reader = new ClassDiagramReader();
             reader.Load(diagram);
