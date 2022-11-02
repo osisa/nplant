@@ -1,15 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-		<LangVersion>10</LangVersion>
+		<!--<LangVersion>10</LangVersion>-->
 		<!--<NETCoreVersion>net6.0-windows</NETCoreVersion>-->
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
+		<!--<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>-->
 		<TargetPlatform>AnyCPU</TargetPlatform>
 		<!--<LibraryFramework>netstandard2.0</LibraryFramework>
 		<DefaultNetTargetFramework>net60</DefaultNetTargetFramework>
 		<DefaultNetTargetFrameworkVersion>v6.0</DefaultNetTargetFrameworkVersion>-->
 	</PropertyGroup>
+
+	<Import Project="..\Package.Build.props" />
 	<ItemGroup>
 	  <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 	  <PackageReference Include="System.Data.Common" Version="4.3.0" />
@@ -17,17 +19,17 @@
 	  <PackageReference Include="System.Drawing.Common" Version="7.0.0-rc.2.22472.3" />
 	  <PackageReference Include="System.Runtime" Version="4.3.1" />
 	  <PackageReference Include="System.ServiceModel.Primitives" Version="4.10.0" />
-	  <!--<PackageReference Include="System.Xml.Linq" Version="3.5.21022.801" />-->
+	  <PackageReference Include="System.Xml.Linq" Version="3.5.21022.801" />
 	  <PackageReference Include="System.Xml.ReaderWriter" Version="4.3.1" />
 	</ItemGroup>
 
-	<PropertyGroup>
+	<!--<PropertyGroup>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<RepositoryUrl>https://github.com/osisa/netbase</RepositoryUrl>
 		<PackageReleaseNotes>NPlant CS</PackageReleaseNotes>
 		<RepositoryType>git</RepositoryType>
 		<IsPackageProject>true</IsPackageProject>
 		<UserSecretsId>b4554a9d-e790-445c-acbc-ad080b70d14f</UserSecretsId>
-	</PropertyGroup>
+	</PropertyGroup>-->
 
 </Project>
