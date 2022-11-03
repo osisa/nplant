@@ -12,17 +12,13 @@ namespace NPlant
 
         private readonly ClassDiagram _diagram;
 
-        private readonly string _text;
-
-        private string _position = "center";
-
         #endregion
 
         #region Constructors and Destructors
 
         public ClassDiagramLegend(ClassDiagram diagram, string text)
         {
-            _text = text;
+            Text = text;
             _diagram = diagram;
         }
 
@@ -30,21 +26,9 @@ namespace NPlant
 
         #region Properties
 
-        internal string Position
-        {
-            get
-            {
-                return _position;
-            }
-        }
+        internal string Position { get; private set; } = "center";
 
-        internal string Text
-        {
-            get
-            {
-                return _text;
-            }
-        }
+        internal string Text { get; }
 
         #endregion
 
@@ -52,19 +36,19 @@ namespace NPlant
 
         public ClassDiagram DisplayCenter()
         {
-            _position = "center";
+            Position = "center";
             return _diagram;
         }
 
         public ClassDiagram DisplayLeft()
         {
-            _position = "left";
+            Position = "left";
             return _diagram;
         }
 
         public ClassDiagram DisplayRight()
         {
-            _position = "right";
+            Position = "right";
             return _diagram;
         }
 
