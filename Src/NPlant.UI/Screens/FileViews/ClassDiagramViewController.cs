@@ -1,9 +1,14 @@
-using System.Collections.Generic;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="ClassDiagramViewController.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using NPlant.Core;
+
 using NPlant.Generation;
 using NPlant.Generation.ClassDiagramming;
 
@@ -11,14 +16,56 @@ namespace NPlant.UI.Screens.FileViews
 {
     public class ClassDiagramViewController : FileViewController
     {
-        private readonly IClassDiagramView _view;
+        #region Fields
+
         private readonly string _filePath;
+
+        private readonly IClassDiagramView _view;
+
         private string _fileToSave;
 
-        public ClassDiagramViewController(IClassDiagramView view, string filePath) : base(view)
+        #endregion
+
+        #region Constructors and Destructors
+
+        public ClassDiagramViewController(IClassDiagramView view, string filePath)
+            : base(view)
         {
             _view = view;
             _filePath = filePath;
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        public void Copy()
+        {
+            Clipboard.SetText(_view.DiagramText);
+        }
+
+        public void LoadDiagram(LoadedDiagram diagram)
+        {
+            _view.DiagramText = BufferedClassDiagramGenerator.GetDiagramText(diagram.Diagram);
+        }
+
+        public void Save()
+        {
+            if (!File.Exists(_fileToSave))
+            {
+                PromptDialog prompt = new PromptDialog("Save to?", _fileToSave) { RequireValue = true };
+
+                if (prompt.ShowDialog() == DialogResult.OK)
+                {
+                    _fileToSave = prompt.Value;
+
+                    File.WriteAllText(_fileToSave, _view.DiagramText);
+                }
+            }
+            else
+            {
+                File.WriteAllText(_fileToSave, _view.DiagramText);
+            }
         }
 
         public void Start()
@@ -32,6 +79,23 @@ namespace NPlant.UI.Screens.FileViews
                 else if (file.IsAssembly())
                     LoadAssembly();
             }
+        }
+
+        #endregion
+
+        #region Methods
+
+        protected override string GetDiagramName()
+        {
+            if (_view.SelectedDiagram == null)
+                return null;
+
+            return _view.SelectedDiagram.Diagram.Name;
+        }
+
+        protected override string GetDiagramText()
+        {
+            return _view.DiagramText;
         }
 
         private void LoadAssembly()
@@ -55,46 +119,6 @@ namespace NPlant.UI.Screens.FileViews
             _fileToSave = _filePath;
         }
 
-        public void Save()
-        {
-            if (! File.Exists(_fileToSave))
-            {
-                PromptDialog prompt = new PromptDialog("Save to?", _fileToSave) {RequireValue = true};
-
-                if (prompt.ShowDialog() == DialogResult.OK)
-                {
-                    _fileToSave = prompt.Value;
-
-                    File.WriteAllText(_fileToSave, _view.DiagramText);
-                }
-            }
-            else
-            {
-                File.WriteAllText(_fileToSave, _view.DiagramText);
-            }
-        }
-
-        public void Copy()
-        {
-            Clipboard.SetText(_view.DiagramText);
-        }
-
-        protected override string GetDiagramText()
-        {
-            return _view.DiagramText;
-        }
-
-        protected override string GetDiagramName()
-        {
-            if (_view.SelectedDiagram == null)
-                return null;
-
-            return _view.SelectedDiagram.Diagram.Name;
-        }
-
-        public void LoadDiagram(LoadedDiagram diagram)
-        {
-            _view.DiagramText = BufferedClassDiagramGenerator.GetDiagramText(diagram.Diagram);
-        }
+        #endregion
     }
 }

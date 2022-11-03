@@ -1,7 +1,7 @@
 ﻿using NPlant.Core;
 using NPlant.Generation.ClassDiagramming;
 
-namespace NPlant.MetaModel.ClassDiagraming
+namespace NPlant.MetaModel.ClassDiagramming
 {
     public class SimulatedClassDiagramGenerator : ClassDiagramGenerator
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using NPlant.MetaModel.ClassDiagraming;
+using NPlant.MetaModel.ClassDiagramming;
 using NUnit.Framework;
 
 namespace NPlant.Tests.ClassDiagrams

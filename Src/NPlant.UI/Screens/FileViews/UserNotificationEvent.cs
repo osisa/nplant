@@ -1,9 +1,17 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="UserNotificationEvent.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
 using System;
 
 namespace NPlant.UI
 {
     public class UserNotificationEvent
     {
+        #region Constructors and Destructors
+
         public UserNotificationEvent(string message, UserNotificationType type = UserNotificationType.Info)
         {
             this.NotificationType = type;
@@ -16,14 +24,23 @@ namespace NPlant.UI
             this.NotificationType = UserNotificationType.Error;
         }
 
-        public UserNotificationType NotificationType { get; private set; }
+        #endregion
+
+        #region Public Properties
+
         public string Message { get; set; }
+
+        public UserNotificationType NotificationType { get; private set; }
+
+        #endregion
     }
 
     public enum UserNotificationType
     {
         Info,
+
         Warning,
+
         Error
     }
 }

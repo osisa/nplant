@@ -1,16 +1,33 @@
-﻿using System.Windows.Forms;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="FileOpenScreen.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+using System.Windows.Forms;
 
 namespace NPlant.UI.Screens
 {
     public class FileOpenScreen : IResultScreen<FileDialogResult>
     {
-        private FileDialogResult _result;
+        #region Fields
+
         private readonly string _filter;
+
+        private FileDialogResult _result;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         public FileOpenScreen(string filter)
         {
             _filter = filter;
         }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         public FileDialogResult GetResult()
         {
@@ -20,10 +37,10 @@ namespace NPlant.UI.Screens
         public DialogResult ShowDialog(IWin32Window owner)
         {
             var dialog = new OpenFileDialog
-            {
-                RestoreDirectory = true,
-                Filter = _filter                         
-            };
+                         {
+                             RestoreDirectory = true,
+                             Filter = _filter
+                         };
 
             var result = dialog.ShowDialog(owner);
 
@@ -31,5 +48,7 @@ namespace NPlant.UI.Screens
 
             return result;
         }
+
+        #endregion
     }
 }

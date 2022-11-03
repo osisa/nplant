@@ -1,26 +1,40 @@
-using NPlant.Core;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="LoadedDiagram.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
 
 namespace NPlant.UI
 {
     public class LoadedDiagram
     {
-        private readonly ClassDiagram _diagram;
+        #region Fields
+
         private readonly string _name;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         public LoadedDiagram(ClassDiagram diagram)
         {
-            _diagram = diagram;
-            _name = _diagram.Name;
+            Diagram = diagram;
+            _name = Diagram.Name;
         }
 
-        public ClassDiagram Diagram
-        {
-            get { return _diagram; }
-        }
+        #endregion
+
+        #region Public Properties
+
+        public ClassDiagram Diagram { get; }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         public override string ToString()
-        {
-            return _name;
-        }
+            => _name;
+
+        #endregion
     }
 }

@@ -1,10 +1,18 @@
-﻿using System.IO;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="FileDialogResult.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+using System.IO;
 using System.Windows.Forms;
 
 namespace NPlant.UI.Screens
 {
     public class FileDialogResult
     {
+        #region Constructors and Destructors
+
         public FileDialogResult(DialogResult result, string fileName)
         {
             this.UserApproved = result == DialogResult.OK;
@@ -17,12 +25,18 @@ namespace NPlant.UI.Screens
             }
         }
 
-        public string FileName { get; private set; }
+        #endregion
+
+        #region Public Properties
 
         public string DirectoryName { get; private set; }
-        
+
+        public string FileName { get; private set; }
+
         public string FilePath { get; private set; }
 
         public bool UserApproved { get; private set; }
+
+        #endregion
     }
 }

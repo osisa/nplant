@@ -1,17 +1,43 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="MainScreenController.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+using System;
+
 using NPlant.UI.Screens;
 
 namespace NPlant.UI
 {
     public class MainScreenController
     {
-        private readonly IMainScreen _screen;
+        #region Fields
+
         private readonly CommandLineArguments _args;
+
+        private readonly IMainScreen _screen;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         public MainScreenController(IMainScreen screen, CommandLineArguments args)
         {
             _screen = screen;
             _args = args;
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        public void OpenFile(FileDialogResult result)
+        {
+            if (result.UserApproved)
+            {
+                this.OpenFile(result.FilePath);
+            }
         }
 
         public void Start()
@@ -24,23 +50,19 @@ namespace NPlant.UI
             EventDispatcher.Register<UserNotificationEvent>(LogUserNotificationToConsole);
         }
 
-        private void LogUserNotificationToConsole(UserNotificationEvent @event)
-        {
-            if (@event != null)
-                _screen.DisplayUserNotification(@event);
-        }
-
         public void Stop(Action action)
         {
             action();
         }
 
-        public void OpenFile(FileDialogResult result)
+        #endregion
+
+        #region Methods
+
+        private void LogUserNotificationToConsole(UserNotificationEvent @event)
         {
-            if (result.UserApproved)
-            {
-                this.OpenFile(result.FilePath);
-            }
+            if (@event != null)
+                _screen.DisplayUserNotification(@event);
         }
 
         private void OpenFile(string filePath)
@@ -52,5 +74,7 @@ namespace NPlant.UI
             else if (filePath.IsAssemblyFilePath())
                 _screen.AddFileView(FileViewType.AssemblyFile, filePath);
         }
+
+        #endregion
     }
 }

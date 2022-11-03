@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using NPlant.Core;
-using NPlant.MetaModel.ClassDiagraming;
+using NPlant.MetaModel.ClassDiagramming;
 using NUnit.Framework;
 
 namespace NPlant.Tests.Diagraming

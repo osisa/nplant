@@ -1,4 +1,10 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="EventDispatcher.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,43 +12,14 @@ namespace NPlant.UI
 {
     public static class EventDispatcher
     {
+        #region Static Fields
+
         [ThreadStatic]
         private static List<Delegate> _actions;
 
-        public static IDisposable Register<T>(Action<T> action)
-        {
-            action.CheckForNullArg("action");
+        #endregion
 
-            if (_actions == null)
-                _actions = new List<Delegate>();
-
-            _actions.Add(action);
-
-            return new EventDispatcherRegistration<T>(action);
-        }
-
-        private static void UnRegister<T>(Action<T> action)
-        {
-            if (_actions == null)
-                return;
-
-            _actions.Remove(action);
-        }
-
-        internal class EventDispatcherRegistration<T> : IDisposable
-        {
-            private readonly Action<T> _action;
-
-            public EventDispatcherRegistration(Action<T> action)
-            {
-                _action = action;
-            }
-
-            public void Dispose()
-            {
-                UnRegister(_action);
-            }
-        }
+        #region Public Methods and Operators
 
         public static int Raise<T>(T @event)
         {
@@ -58,6 +35,59 @@ namespace NPlant.UI
             }
 
             return count;
+        }
+
+        public static IDisposable Register<T>(Action<T> action)
+        {
+            action.CheckForNullArg("action");
+
+            if (_actions == null)
+                _actions = new List<Delegate>();
+
+            _actions.Add(action);
+
+            return new EventDispatcherRegistration<T>(action);
+        }
+
+        #endregion
+
+        #region Methods
+
+        private static void UnRegister<T>(Action<T> action)
+        {
+            if (_actions == null)
+                return;
+
+            _actions.Remove(action);
+        }
+
+        #endregion
+
+        internal class EventDispatcherRegistration<T> : IDisposable
+        {
+            #region Fields
+
+            private readonly Action<T> _action;
+
+            #endregion
+
+            #region Constructors and Destructors
+
+            public EventDispatcherRegistration(Action<T> action)
+            {
+                _action = action;
+            }
+
+            #endregion
+
+            #region Public Methods and Operators
+
+            public void Dispose()
+            {
+                UnRegister(_action);
+            }
+
+            #endregion
         }
     }
 }

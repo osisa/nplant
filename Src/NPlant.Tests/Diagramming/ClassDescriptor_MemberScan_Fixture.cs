@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using System.ServiceModel;
+
 using NPlant.Generation.ClassDiagramming;
-using NPlant.MetaModel.ClassDiagraming;
+using NPlant.MetaModel.ClassDiagramming;
+using NPlant.Tests.Diagraming;
+
 using NUnit.Framework;
 
-namespace NPlant.Tests.Diagraming
+namespace NPlant.Tests.Diagramming
 {
     [TestFixture]
     public class ClassDescriptor_MemberScan_Fixture

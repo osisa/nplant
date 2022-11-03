@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using NPlant.MetaModel.ClassDiagraming;
+using NPlant.MetaModel.ClassDiagramming;
 using NUnit.Framework;
 
 namespace NPlant.Tests.ClassDiagrams

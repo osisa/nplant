@@ -1,18 +1,33 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="NPlantImage.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Text;
+
 using NPlant.Core;
 
 namespace NPlant.Generation
 {
     public class NPlantImage
     {
-        private readonly string _javaPath;
+        #region Fields
+
         private readonly PlantUmlInvocation _invocation;
-        private Action<string> _logger = text => Console.WriteLine(text);
+
+        private readonly string _javaPath;
+
+        private Action<string> _logger = Console.WriteLine;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         public NPlantImage(string javaPath, PlantUmlInvocation invocation)
         {
@@ -20,38 +35,46 @@ namespace NPlant.Generation
             _invocation = invocation;
         }
 
+        #endregion
+
+        #region Public Properties
+
         public Action<string> Logger
         {
-            get { return _logger; }
+            get => _logger;
             set
             {
-                if(value != null)
+                if (value != null)
                     _logger = value;
             }
         }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         public Image Create(string diagramText, string diagramName)
         {
             try
             {
-                Process process = new Process
-                    {
-                        StartInfo = 
-                            {
-                                FileName = _javaPath,
-                                Arguments = _invocation.ToString(),
-                                UseShellExecute = false,
-                                CreateNoWindow = true,
-                                RedirectStandardError = true,
-                                RedirectStandardInput = true,
-                                RedirectStandardOutput = true
-                            },
-                        EnableRaisingEvents = true
-                    };
+                var process = new Process
+                                  {
+                                      StartInfo =
+                                      {
+                                          FileName = _javaPath,
+                                          Arguments = _invocation.ToString(),
+                                          UseShellExecute = false,
+                                          CreateNoWindow = true,
+                                          RedirectStandardError = true,
+                                          RedirectStandardInput = true,
+                                          RedirectStandardOutput = true
+                                      },
+                                      EnableRaisingEvents = true
+                                  };
 
                 Logger("Invoking plantuml - Diagram: {0}, FileName: {1}, Arguments: {2}".FormatWith(diagramName, process.StartInfo.FileName, process.StartInfo.Arguments));
 
-                bool started = process.Start();
+                var started = process.Start();
 
                 if (started)
                 {
@@ -63,7 +86,7 @@ namespace NPlant.Generation
 
                     return Image.FromStream(process.StandardOutput.BaseStream);
                 }
-                
+
                 Logger("Failed to start plantuml");
 
                 return null;
@@ -75,19 +98,21 @@ namespace NPlant.Generation
                 if (ex.IsDontMessWithMeException())
                     throw;
 
-                string message = CreateException(ex);
+                var message = CreateException(ex);
 
                 throw new NPlantException(message, ex);
             }
         }
 
+        #endregion
+
+        #region Methods
+
         private string CreateException(Exception exception)
         {
-            Win32Exception win32 = exception as Win32Exception;
-
-            if (win32 != null)
+            if (exception is Win32Exception win32)
             {
-                if (! File.Exists(_javaPath))
+                if (!File.Exists(_javaPath))
                 {
                     if (Path.IsPathRooted(_javaPath))
                     {
@@ -98,11 +123,10 @@ namespace NPlant.Generation
                 }
             }
 
-            StringBuilder buffer = new StringBuilder();
+            var buffer = new StringBuilder();
             buffer.AppendLine("Failed to invoke plant uml.  See the inner exception for more details.  Messages:");
-                
-            Exception ex = exception;
 
+            var ex = exception;
             while (ex != null)
             {
                 buffer.AppendLine(ex.Message);
@@ -111,5 +135,7 @@ namespace NPlant.Generation
 
             return buffer.ToString();
         }
+
+        #endregion
     }
 }

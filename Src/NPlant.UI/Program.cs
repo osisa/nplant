@@ -1,15 +1,22 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="Program.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using System.Windows.Forms;
+
 using NPlant.Core;
 
 namespace NPlant.UI
 {
-    static class Program
+    public static class Program
     {
+        #region Methods
+
         /// <summary>
-        /// The main entry point for the application.
+        ///     The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
@@ -17,13 +24,13 @@ namespace NPlant.UI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.ThreadException += (sender, args) =>
+            {
+                if (args.Exception != null)
                 {
-                    if (args.Exception != null)
-                    {
-                        var @event = new UserNotificationEvent(args.Exception.Message, UserNotificationType.Error);
-                        EventDispatcher.Raise(@event);
-                    }
-                };
+                    var @event = new UserNotificationEvent(args.Exception.Message, UserNotificationType.Error);
+                    EventDispatcher.Raise(@event);
+                }
+            };
 
             UnpackPlantUML();
 
@@ -41,5 +48,7 @@ namespace NPlant.UI
                 EventDispatcher.Raise(new UserNotificationEvent("Error occurred while trying to unpack the plantuml.jar file", exception));
             }
         }
+
+        #endregion
     }
 }

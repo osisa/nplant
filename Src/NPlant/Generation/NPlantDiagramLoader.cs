@@ -1,45 +1,88 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="NPlantDiagramLoader.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+
 using NPlant.Core;
 
 namespace NPlant.Generation
 {
     public class NPlantDiagramLoader
     {
-        static readonly Type DiagramInterface = typeof(ClassDiagram);
-        static readonly Type DiagramFactoryInterface = typeof(IDiagramFactory);
+        #region Static Fields
+
+        private static readonly Type _diagramFactoryInterface = typeof(IDiagramFactory);
+
+        private static readonly Type _diagramInterface = typeof(ClassDiagram);
+
+        #endregion
+
+        #region Fields
 
         private readonly IRunnerRecorder _recorder = NullRecorder.Instance;
 
-        public NPlantDiagramLoader(){}
+        #endregion
+
+        #region Constructors and Destructors
+
+        public NPlantDiagramLoader()
+        {
+        }
 
         public NPlantDiagramLoader(IRunnerRecorder recorder)
         {
             _recorder = recorder;
         }
 
+        #endregion
+
+        #region Public Methods and Operators
+
         public IEnumerable<DiscoveredDiagram> Load(Assembly assembly)
         {
             return Load(assembly, type => true);
         }
 
-        public IEnumerable<DiscoveredDiagram> Load(Assembly assembly, Func<Type, bool> matcher)
+        private IEnumerable<DiscoveredDiagram> Load(Assembly assembly, Func<Type, bool> matcher)
         {
             _recorder.Log("Starting Stage: Diagram Instantiation...");
 
-            DiscoveredDiagram[] diagrams = LoadFromAssembly(assembly, _recorder.Log);
+            var diagrams = LoadFromAssembly(assembly, _recorder.Log);
 
             _recorder.Log("Finished Stage: Diagram Instantiation (diagrams instantiated={0})...".FormatWith(diagrams.Length));
 
             return diagrams;
         }
 
+        #endregion
+
+        #region Methods
+
+        private static DiscoveredDiagram InstantiateDiagram(Type exportedType)
+        {
+            if (!exportedType.TryGetPublicParameterlessConstructor(out var ctor))
+                throw new NPlantException("Diagrams are expected to have a public parameterless constructor.  '{0}' does not meet this expectation.".FormatWith(exportedType.FullName));
+
+            return new DiscoveredDiagram(exportedType.Namespace, (ClassDiagram)ctor.Invoke(new object[0]));
+        }
+
+        private static IDiagramFactory InstantiateDiagramFactory(Type exportedType)
+        {
+            if (!exportedType.TryGetPublicParameterlessConstructor(out var ctor))
+                throw new NPlantException("ClassDiagramFactory's are expected to have a public parameterless constructor.  '{0}' does not meet this expectation.".FormatWith(exportedType.FullName));
+
+            return (IDiagramFactory)ctor.Invoke(new object[0]);
+        }
+
         private static DiscoveredDiagram[] LoadFromAssembly(Assembly assembly, Action<string> logger = null)
         {
-            if (logger == null)
-                logger = (msg) => { };
+            logger ??= (msg) => { };
 
             if (assembly == null)
             {
@@ -58,21 +101,21 @@ namespace NPlant.Generation
             {
                 if (!exportedType.IsAbstract)
                 {
-                    if (DiagramInterface.IsAssignableFrom(exportedType))
+                    if (_diagramInterface.IsAssignableFrom(exportedType))
                     {
-                        logger("ExportedType '{0}' found to be assignable to {1}.".FormatWith(exportedType.FullName, DiagramInterface.FullName));
+                        logger("ExportedType '{0}' found to be assignable to {1}.".FormatWith(exportedType.FullName, _diagramInterface.FullName));
 
                         diagrams.Add(InstantiateDiagram(exportedType));
                     }
-                    else if (DiagramFactoryInterface.IsAssignableFrom(exportedType))
+                    else if (_diagramFactoryInterface.IsAssignableFrom(exportedType))
                     {
-                        logger("ExportedType '{0}' found to be assignable to {1}.".FormatWith(exportedType.FullName, DiagramFactoryInterface.FullName));
+                        logger("ExportedType '{0}' found to be assignable to {1}.".FormatWith(exportedType.FullName, _diagramFactoryInterface.FullName));
 
                         var factory = InstantiateDiagramFactory(exportedType);
 
                         var classDiagrams = factory.GetDiagrams();
 
-                        if(classDiagrams != null)
+                        if (classDiagrams != null)
                             diagrams.AddRange(classDiagrams.Select(d => new DiscoveredDiagram(exportedType.Namespace, d)));
                     }
                 }
@@ -81,25 +124,6 @@ namespace NPlant.Generation
             return diagrams.ToArray();
         }
 
-        private static IDiagramFactory InstantiateDiagramFactory(Type exportedType)
-        {
-            ConstructorInfo ctor;
-
-            if (!exportedType.TryGetPublicParameterlessConstructor(out ctor))
-                throw new NPlantException("ClassDiagramFactory's are expected to have a public parameterless constructor.  '{0}' does not meet this expectation.".FormatWith(exportedType.FullName));
-
-            return (IDiagramFactory)ctor.Invoke(new object[0]);
-        }
-
-        private static DiscoveredDiagram InstantiateDiagram(Type exportedType)
-        {
-            ConstructorInfo ctor;
-
-            if (!exportedType.TryGetPublicParameterlessConstructor(out ctor))
-                throw new NPlantException("Diagrams are expected to have a public parameterless constructor.  '{0}' does not meet this expectation.".FormatWith(exportedType.FullName));
-
-            return new DiscoveredDiagram(exportedType.Namespace, (ClassDiagram)ctor.Invoke(new object[0]));
-        }
-
+        #endregion
     }
 }

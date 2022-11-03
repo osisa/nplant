@@ -1,28 +1,31 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright http://www.opensource.org file="DiscoveredDiagram.cs">
+// <copyright http://www.opensource.org file="AssemblyDescriptor.cs">
 //    (c) 2022. See license.txt in binary folder.
 // </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace NPlant.Generation
+using System.Reflection;
+
+using NPlant.Core;
+
+namespace NPlant.MetaModel.ClassDiagramming
 {
-    public class DiscoveredDiagram
+    public class AssemblyDescriptor : IKeyedItem
     {
         #region Constructors and Destructors
 
-        public DiscoveredDiagram(string @namespace, ClassDiagram diagram)
+        public AssemblyDescriptor(Assembly assembly)
         {
-            Namespace = @namespace;
-            Diagram = diagram;
+            Assembly = assembly;
         }
 
         #endregion
 
         #region Public Properties
 
-        public ClassDiagram Diagram { get; private set; }
+        public Assembly Assembly { get; private set; }
 
-        public string Namespace { get; private set; }
+        public string Key => Assembly.FullName;
 
         #endregion
     }

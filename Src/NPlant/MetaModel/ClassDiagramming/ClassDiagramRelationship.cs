@@ -1,4 +1,4 @@
-﻿namespace NPlant.MetaModel.ClassDiagraming
+﻿namespace NPlant.MetaModel.ClassDiagramming
 {
     public class ClassDiagramRelationship
     {

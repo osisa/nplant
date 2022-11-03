@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading;
 using NPlant.Core;
 using NPlant.Generation.ClassDiagramming;
-using NPlant.MetaModel.ClassDiagraming;
+using NPlant.MetaModel.ClassDiagramming;
 
 public static class ExtensionMethods
 {

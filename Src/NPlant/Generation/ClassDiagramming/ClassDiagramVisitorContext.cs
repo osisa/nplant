@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using NPlant.Core;
-using NPlant.MetaModel.ClassDiagraming;
+using NPlant.MetaModel.ClassDiagramming;
 
 namespace NPlant.Generation.ClassDiagramming
 {

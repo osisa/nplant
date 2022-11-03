@@ -1,3 +1,9 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="ScreenManager.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
 using System;
 using System.Windows.Forms;
 
@@ -5,7 +11,10 @@ namespace NPlant.UI
 {
     public static class ScreenManager
     {
-        public static void Launch<TScreen>(IWin32Window parent, Action<TScreen> onOK = null, Action<TScreen> onCancel = null) where TScreen : IScreen, new()
+        #region Public Methods and Operators
+
+        public static void Launch<TScreen>(IWin32Window parent, Action<TScreen> onOK = null, Action<TScreen> onCancel = null)
+            where TScreen : IScreen, new()
         {
             var t = new TScreen();
             var dialogResult = t.ShowDialog(parent);
@@ -20,8 +29,11 @@ namespace NPlant.UI
             }
         }
 
-        public static TResult Launch<TScreen, TResult>(IWin32Window parent, Func<TScreen> constructor, Action<TScreen, TResult> onOK = null,
-                                                       Action<TScreen, TResult> onCancel = null)
+        public static TResult Launch<TScreen, TResult>(
+            IWin32Window parent,
+            Func<TScreen> constructor,
+            Action<TScreen, TResult> onOK = null,
+            Action<TScreen, TResult> onCancel = null)
             where TScreen : IResultScreen<TResult>
         {
             var t = constructor();
@@ -40,10 +52,15 @@ namespace NPlant.UI
             return result;
         }
 
-        public static TResult Launch<TScreen, TResult>(IWin32Window parent, Action<TScreen, TResult> onOK = null, Action<TScreen, TResult> onCancel = null) where TScreen : IResultScreen<TResult>, new()
+        public static TResult Launch<TScreen, TResult>(IWin32Window parent, Action<TScreen, TResult> onOK = null, Action<TScreen, TResult> onCancel = null)
+            where TScreen : IResultScreen<TResult>, new()
         {
             return Launch(parent, () => new TScreen(), onOK, onCancel);
         }
+
+        #endregion
+
+        #region Methods
 
         private static bool IsAffirmative(DialogResult dialogResult)
         {
@@ -54,5 +71,7 @@ namespace NPlant.UI
         {
             return (dialogResult == DialogResult.Cancel || dialogResult == DialogResult.No);
         }
+
+        #endregion
     }
 }

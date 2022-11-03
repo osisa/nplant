@@ -1,14 +1,30 @@
-﻿namespace NPlant.Generation
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="NPlantRunnerOptions.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+namespace NPlant.Generation
 {
     public interface INPlantRunnerOptions
     {
-        string OutputDirectory { get; set; }
+        #region Public Properties
+
         string AssemblyToScan { get; set; }
-        string Clean { get; set; }
+
         string Categorize { get; set; }
+
+        string Clean { get; set; }
+
         string JavaPath { get; set; }
-        string PlantUml { get; set; }
+
+        string OutputDirectory { get; set; }
+
         NPlantCategorizations ParsedCategorized { get; set; }
+
+        string PlantUml { get; set; }
+
+        #endregion
     }
 
     public enum NPlantCategorizations

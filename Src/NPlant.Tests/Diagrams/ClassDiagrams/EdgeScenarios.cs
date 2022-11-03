@@ -1,5 +1,5 @@
 ﻿using System;
-using NPlant.MetaModel.ClassDiagraming;
+using NPlant.MetaModel.ClassDiagramming;
 using NPlant.Samples.CircularReferences;
 using NUnit.Framework;
 

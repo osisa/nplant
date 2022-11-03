@@ -2,7 +2,7 @@
 using System.Reflection;
 using NPlant.Core;
 
-namespace NPlant.MetaModel.ClassDiagraming
+namespace NPlant.MetaModel.ClassDiagramming
 {
     public class ClassMethodDescriptor : IKeyedItem
     {

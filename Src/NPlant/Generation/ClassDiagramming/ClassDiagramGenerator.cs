@@ -1,4 +1,4 @@
-using NPlant.MetaModel.ClassDiagraming;
+using NPlant.MetaModel.ClassDiagramming;
 
 namespace NPlant.Generation.ClassDiagramming
 {
