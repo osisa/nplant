@@ -1,19 +1,49 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="ClassDiagramNote.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 
 namespace NPlant
 {
     public class ClassDiagramNote
     {
-        private readonly ClassDiagram _diagram;
-        private readonly List<string> _lines = new List<string>();
-        private readonly List<Type> _connectedTypes = new List<Type>();
+        #region Fields
+
+        private readonly List<Type> _connectedTypes = new();
+
+        private readonly List<string> _lines = new();
+
+        #endregion
+
+        #region Constructors and Destructors
 
         public ClassDiagramNote(string line, ClassDiagram diagram)
         {
-            _diagram = diagram;
+            Diagram = diagram;
             _lines.Add(line);
         }
+
+        #endregion
+
+        #region Public Properties
+
+        public ClassDiagram Diagram { get; }
+
+        #endregion
+
+        #region Properties
+
+        internal IEnumerable<Type> ConnectedClasses => _connectedTypes;
+
+        internal IEnumerable<string> Lines => _lines;
+
+        #endregion
+
+        #region Public Methods and Operators
 
         public ClassDiagramNote AddLine(string line)
         {
@@ -24,18 +54,11 @@ namespace NPlant
         public ClassDiagramNote ConnectedToClass<T>()
         {
             if (!_connectedTypes.Contains(typeof(T)))
-                _connectedTypes.Add(typeof (T));
-    
+                _connectedTypes.Add(typeof(T));
+
             return this;
         }
 
-        public ClassDiagram Diagram { get { return _diagram; } }
-
-        internal IEnumerable<string> Lines { get { return _lines; } }
-
-        internal IEnumerable<Type> ConnectedClasses
-        {
-            get { return _connectedTypes; }
-        }
+        #endregion
     }
 }

@@ -1,6 +1,13 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="ClassDiagram.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.Reflection;
+
 using NPlant.Core;
 using NPlant.Generation.ClassDiagramming;
 using NPlant.MetaModel.ClassDiagramming;
@@ -9,17 +16,20 @@ namespace NPlant
 {
     public class ClassDiagram
     {
-        private readonly TypeMetaModelSet _types = new TypeMetaModelSet();
-        private string _name;
-        private string _title;
-        private readonly KeyedList<AssemblyDescriptor> _assemblyDescriptors = new KeyedList<AssemblyDescriptor>();
-        private readonly KeyedList<ClassDescriptor> _classDescriptors = new KeyedList<ClassDescriptor>();
-        private readonly ClassDiagramOptions _generationOptions;
-        private ClassDiagramLegend _legend;
-        private readonly List<ClassDiagramNote> _notes = new List<ClassDiagramNote>();
-        private readonly List<ClassDiagramPackage> _packages = new List<ClassDiagramPackage>();
+        #region Fields
 
-        public ClassDiagram(IEnumerable<Type> types) : this()
+        private readonly KeyedList<AssemblyDescriptor> _assemblyDescriptors = new();
+
+        private readonly List<ClassDiagramNote> _notes = new();
+
+        private readonly List<ClassDiagramPackage> _packages = new();
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        public ClassDiagram(IEnumerable<Type> types)
+            : this()
         {
             if (types != null)
             {
@@ -28,7 +38,8 @@ namespace NPlant
             }
         }
 
-        public ClassDiagram(Type type, params Type[] types) : this(types)
+        public ClassDiagram(Type type, params Type[] types)
+            : this(types)
         {
             type.CheckForNullArg("type");
 
@@ -37,41 +48,107 @@ namespace NPlant
 
         public ClassDiagram()
         {
-            _generationOptions = new ClassDiagramOptions(this);
-            _name = this.GetType().Name;
+            GenerationOptions = new ClassDiagramOptions(this);
+            Name = this.GetType().Name;
         }
 
-        internal TypeMetaModelSet Types { get { return _types; } }
+        #endregion
 
-        protected RootClassDescriptor<T> AddClass<T>()
+        #region Public Properties
+
+        public int? DepthLimit { get; internal set; }
+
+        public ClassDiagramOptions GenerationOptions { get; }
+
+        public string Name { get; private set; }
+
+        public KeyedList<ClassDescriptor> RootClasses { get; } = new();
+
+        public string Title { get; private set; }
+
+        #endregion
+
+        #region Properties
+
+        internal ClassDiagramLegend Legend { get; private set; }
+
+        internal IEnumerable<ClassDiagramNote> Notes => _notes;
+
+        internal IEnumerable<ClassDiagramPackage> Packages => _packages;
+
+        internal ClassDiagramScanModes ScanMode { get; set; }
+
+        internal bool ShowMembers { get; set; }
+
+        internal BindingFlags ShowMembersBindingFlags { get; set; }
+
+        internal bool ShowMethods { get; set; }
+
+        internal BindingFlags ShowMethodsBindingFlags { get; set; }
+
+        internal TypeMetaModelSet Types { get; } = new();
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        public void AddClass(ClassDescriptor descriptor, bool addAssembly = true)
         {
-            var classDescriptor = new RootClassDescriptor<T>();
+            RootClasses.Add(descriptor.CheckForNullArg("descriptor"));
 
-            this.AddClass(classDescriptor);
-            _classDescriptors.Add(classDescriptor);
-
-            return classDescriptor;
+            if (addAssembly)
+                AddAssembly(descriptor.ReflectedType.Assembly);
         }
 
-        protected RootEnumDescriptor AddEnum<T>()
+        public ClassDiagramNote AddNote(string line)
         {
-            var classDescriptor = new RootEnumDescriptor(typeof(T));
+            var note = new ClassDiagramNote(line, this);
 
-            this.AddClass(classDescriptor);
-            _classDescriptors.Add(classDescriptor);
+            _notes.Add(note);
 
-            return classDescriptor;
+            return note;
         }
 
-        protected ClassDiagram AddAssemblyOf<T>()
+        public ClassDiagramLegend LegendOf(string legend)
         {
-            return AddAssembly(typeof(T).Assembly);
+            Legend = new ClassDiagramLegend(this, legend);
+            return Legend;
         }
 
-        protected ClassDiagram AddAssembly(Assembly assembly)
+        public ClassDiagram Named(string name)
         {
-            _assemblyDescriptors.Add(new AssemblyDescriptor(assembly));
+            Name = name;
+
             return this;
+        }
+
+        public ClassDiagram Titled(string title)
+        {
+            Title = title;
+
+            return this;
+        }
+
+        #endregion
+
+        #region Methods
+
+        internal void AddReflectedClass(int level, Type type)
+        {
+            var descriptor = type.GetReflected();
+
+            descriptor.SetLevel(level);
+            this.AddClass(descriptor);
+        }
+
+        internal IDiagramFormatter CreateFormatter(ClassDiagramVisitorContext context)
+        {
+            return new ClassDiagramFormatter(this, context);
+        }
+
+        internal string GetClassColor(ClassDescriptor @class)
+        {
+            return null;
         }
 
         protected ClassDiagram AddAllSubClassesOff<T>()
@@ -89,95 +166,36 @@ namespace NPlant
             return this;
         }
 
-        internal void AddReflectedClass(int level, Type type)
+        protected ClassDiagram AddAssembly(Assembly assembly)
         {
-            var descriptor = type.GetReflected();
-
-            descriptor.SetLevel(level);
-            this.AddClass(descriptor);
-        }
-
-        public void AddClass(ClassDescriptor descriptor, bool addAssembly = true)
-        {
-            _classDescriptors.Add(descriptor.CheckForNullArg("descriptor"));
-
-            if(addAssembly)
-                AddAssembly(descriptor.ReflectedType.Assembly);
-        }
-
-        public KeyedList<ClassDescriptor> RootClasses { get { return _classDescriptors; } }
-
-        internal IDiagramFormatter CreateFormatter(ClassDiagramVisitorContext context)
-        {
-            return new ClassDiagramFormatter(this, context);
-        }
-
-        public string Name { get { return _name; } }
-
-        public ClassDiagram Named(string name)
-        {
-            _name = name;
-
+            _assemblyDescriptors.Add(new AssemblyDescriptor(assembly));
             return this;
         }
 
-        public string Title { get { return _title; } }
-
-        public ClassDiagram Titled(string title)
+        protected ClassDiagram AddAssemblyOf<T>()
         {
-            _title = title;
-
-            return this;
+            return AddAssembly(typeof(T).Assembly);
         }
 
-        public ClassDiagramOptions GenerationOptions
+        protected RootClassDescriptor<T> AddClass<T>()
         {
-            get { return _generationOptions; }
+            var classDescriptor = new RootClassDescriptor<T>();
+
+            this.AddClass(classDescriptor);
+            RootClasses.Add(classDescriptor);
+
+            return classDescriptor;
         }
 
-        public int? DepthLimit { get; internal set; }
-
-        public ClassDiagramLegend LegendOf(string legend)
+        protected RootEnumDescriptor AddEnum<T>()
         {
-            _legend = new ClassDiagramLegend(this, legend);
-            return _legend;
+            var classDescriptor = new RootEnumDescriptor(typeof(T));
+
+            this.AddClass(classDescriptor);
+            RootClasses.Add(classDescriptor);
+
+            return classDescriptor;
         }
-
-        internal ClassDiagramLegend Legend { get { return _legend; } }
-
-        internal IEnumerable<ClassDiagramNote> Notes
-        {
-            get { return _notes; }
-        }
-
-        public ClassDiagramNote AddNote(string line)
-        {
-            var note = new ClassDiagramNote(line, this);
-
-            _notes.Add(note);
-
-            return note;
-        }
-
-        internal string GetClassColor(ClassDescriptor @class)
-        {
-            return null;
-        }
-
-        internal IEnumerable<ClassDiagramPackage> Packages
-        {
-            get { return _packages; }
-        }
-
-        internal ClassDiagramScanModes ScanMode { get; set; }
-
-        internal bool ShowMembers { get; set; }
-
-        internal BindingFlags ShowMembersBindingFlags { get; set; }
-
-        internal bool ShowMethods { get; set; }
-        
-        internal BindingFlags ShowMethodsBindingFlags { get; set; }
 
         protected ClassDiagramPackage AddPackage(string packageName)
         {
@@ -185,8 +203,10 @@ namespace NPlant
 
             var package = new ClassDiagramPackage(packageName, this);
             _packages.Add(package);
-            
+
             return package;
         }
+
+        #endregion
     }
 }

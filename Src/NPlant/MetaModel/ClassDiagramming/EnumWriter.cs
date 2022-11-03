@@ -1,17 +1,34 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="EnumWriter.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using System.Text;
+
 using NPlant.Generation.ClassDiagramming;
 
 namespace NPlant.MetaModel.ClassDiagramming
 {
     public class EnumWriter : IDescriptorWriter
     {
+        #region Fields
+
         private readonly Type _enumType;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         public EnumWriter(Type enumType)
         {
             _enumType = enumType;
         }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         public string Write(ClassDiagramVisitorContext context)
         {
@@ -21,7 +38,7 @@ namespace NPlant.MetaModel.ClassDiagramming
 
             buffer.AppendLine("enum \"{0}\" {1}".FormatWith(_enumType.Name, "{"));
 
-            if(context.ShowMembers)
+            if (context.ShowMembers)
             {
                 foreach (var name in names)
                 {
@@ -33,5 +50,7 @@ namespace NPlant.MetaModel.ClassDiagramming
 
             return buffer.ToString();
         }
+
+        #endregion
     }
 }

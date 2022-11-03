@@ -1,6 +1,14 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="TypeMetaModelFixture.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
+
 using NPlant.Core;
+
 using NUnit.Framework;
 
 namespace NPlant.Tests.Core
@@ -8,19 +16,7 @@ namespace NPlant.Tests.Core
     [TestFixture]
     public class TypeMetaModelFixture
     {
-        [Test]
-        public void TypeMetaModel_Should_Be_Properly_Defaulted()
-        {
-            var model = new TypeMetaModel(typeof (Subject));
-
-            Assert.That(model.Hidden, Is.False);
-            Assert.That(model.HideAsBaseClass, Is.False);
-            Assert.That(model.IsComplexType, Is.True);
-            Assert.That(model.IsPrimitive, Is.False);
-            Assert.That(model.Name, Is.EqualTo("Subject"));
-            Assert.That(model.Note.ToString(), Is.EqualTo(string.Empty));
-            Assert.That(model.TreatAllMembersAsPrimitives, Is.False);
-        }
+        #region Public Methods and Operators
 
         [TestCase(typeof(int?), "Nullable<Int32>")]
         [TestCase(typeof(DateTime?), "Nullable<DateTime>")]
@@ -35,14 +31,32 @@ namespace NPlant.Tests.Core
         }
 
         [Test]
+        public void TypeMetaModel_Should_Be_Properly_Defaulted()
+        {
+            var model = new TypeMetaModel(typeof(Subject));
+
+            Assert.That(model.Hidden, Is.False);
+            Assert.That(model.HideAsBaseClass, Is.False);
+            Assert.That(model.IsComplexType, Is.True);
+            Assert.That(model.IsPrimitive, Is.False);
+            Assert.That(model.Name, Is.EqualTo("Subject"));
+            Assert.That(model.Note.ToString(), Is.EqualTo(string.Empty));
+            Assert.That(model.TreatAllMembersAsPrimitives, Is.False);
+        }
+
+        [Test]
         public void TypeMetaModelSet_Should_Serve_Up_Singular_Instances()
         {
             TypeMetaModelSet set = new TypeMetaModelSet();
-            var instance = set[typeof (Subject)];
+            var instance = set[typeof(Subject)];
 
             Assert.That(instance, Is.SameAs(set[typeof(Subject)]));
         }
 
-        public class Subject { }
+        #endregion
+
+        public class Subject
+        {
+        }
     }
 }

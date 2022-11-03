@@ -1,4 +1,11 @@
-﻿using NPlant.MetaModel.ClassDiagramming;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="Given_A_Simple_Single_Entity.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+using NPlant.MetaModel.ClassDiagramming;
+
 using NUnit.Framework;
 
 namespace NPlant.Tests.Diagrams.ClassDiagrams
@@ -6,6 +13,8 @@ namespace NPlant.Tests.Diagrams.ClassDiagrams
     [TestFixture]
     public class Given_A_Simple_Single_Entity
     {
+        #region Public Methods and Operators
+
         [Test]
         public void WHEN_Rendered_With_Defaults_THEN_Diagram_Has_One_Class_With_Members()
         {
@@ -37,19 +46,31 @@ namespace NPlant.Tests.Diagrams.ClassDiagrams
             Assert.That(simulation.Classes[0].Members[2].IsHidden, Is.False);
         }
 
+        #endregion
+
         public class HiddenFieldBarDiagram : ClassDiagram
         {
+            #region Constructors and Destructors
+
             public HiddenFieldBarDiagram()
             {
                 this.AddClass<SimpleEntity>().ForMember(x => x.Bar).Hide();
             }
+
+            #endregion
         }
 
         public class SimpleEntity
         {
-            public string Foo;
+            #region Fields
+
             public string Bar;
+
             public string Baz;
+
+            public string Foo;
+
+            #endregion
         }
     }
 }

@@ -10,9 +10,12 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
+
 using NPlant.Core;
 using NPlant.Generation.ClassDiagramming;
 using NPlant.MetaModel.ClassDiagramming;
+
+namespace NPlant;
 
 public static class ExtensionMethods
 {

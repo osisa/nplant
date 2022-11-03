@@ -1,19 +1,35 @@
-﻿using System;
-using System.Text;
-using NAnt.Core;
-using NPlant.Generation;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="NAntRunnerRecorder.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
 
-using Task = NAnt.Core.Task;
+using System;
+using System.Text;
+
+using NAnt.Core;
+
+using NPlant.Generation;
 
 namespace NPlant.NAntTasks
 {
     public class NAntRunnerRecorder : IRunnerRecorder
     {
-        private readonly Task _task;
+        #region Fields
+
+        private readonly StringBuilder _builder = new();
+
         private readonly string _delimiter;
-        private readonly StringBuilder _builder = new StringBuilder();
-        private int _recordedCount;
+
         private readonly string _propertyName;
+
+        private readonly Task _task;
+
+        private int _recordedCount;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         public NAntRunnerRecorder(Task task, string propertyName, string delimiter)
         {
@@ -22,20 +38,9 @@ namespace NPlant.NAntTasks
             _delimiter = delimiter.IsNullOrEmpty() ? ";" : delimiter;
         }
 
-        public void Record(string filePath)
-        {
-            if (_recordedCount > 0)
-                _builder.Append(_delimiter);
+        #endregion
 
-            _builder.Append(string.Concat("\"", filePath, "\""));
-
-            _recordedCount++;
-        }
-
-        public void Log(string message)
-        {
-            _task.Log(Level.Debug, message);
-        }
+        #region Public Methods and Operators
 
         public void Dispose()
         {
@@ -51,5 +56,22 @@ namespace NPlant.NAntTasks
 
             GC.SuppressFinalize(this);
         }
+
+        public void Log(string message)
+        {
+            _task.Log(Level.Debug, message);
+        }
+
+        public void Record(string filePath)
+        {
+            if (_recordedCount > 0)
+                _builder.Append(_delimiter);
+
+            _builder.Append(string.Concat("\"", filePath, "\""));
+
+            _recordedCount++;
+        }
+
+        #endregion
     }
 }

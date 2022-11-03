@@ -10,10 +10,6 @@ namespace NPlant.UI.Screens.FileViews
 {
     public class ImageFileGenerationModel
     {
-        #region Fields
-
-        #endregion
-
         #region Constructors and Destructors
 
         private ImageFileGenerationModel(string diagramText, string diagramName)
@@ -42,8 +38,8 @@ namespace NPlant.UI.Screens.FileViews
         #region Public Methods and Operators
 
         public static ImageFileGenerationModel Create(string diagramText, string diagramName)
-            =>  new (diagramText, diagramName);
-        
+            => new(diagramText, diagramName);
+
         #endregion
     }
 }

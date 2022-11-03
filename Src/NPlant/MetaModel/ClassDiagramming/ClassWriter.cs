@@ -1,33 +1,51 @@
-using System;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="ClassWriter.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
 using NPlant.Generation.ClassDiagramming;
 
 namespace NPlant.MetaModel.ClassDiagramming
 {
     public class ClassWriter : IDescriptorWriter
     {
-        private readonly ClassDiagram _diagram;
+        #region Fields
+
         private readonly ClassDescriptor _class;
+
+        private readonly ClassDiagram _diagram;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         public ClassWriter(ClassDiagram diagram, ClassDescriptor @class)
         {
             _diagram = diagram;
-            this._class = @class;
+            _class = @class;
         }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         public string Write(ClassDiagramVisitorContext context)
         {
-            string color = _class.Color ?? _diagram.GetClassColor(_class);
-
-            StringBuilder buffer = new StringBuilder();
+            var color = _class.Color ?? _diagram.GetClassColor(_class);
+            var buffer = new StringBuilder();
 
             if (_class.ReflectedType.IsInterface)
                 buffer.AppendLine(string.Format("    interface \"{0}\"{1} {2}", _class.Name, color, "{"));
+
             else if (_class.ReflectedType.IsAbstract)
                 buffer.AppendLine(string.Format("    abstract class \"{0}\"{1} {2}", _class.Name, color, "{"));
-            else 
+
+            else
                 buffer.AppendLine(string.Format("    class \"{0}\"{1} {2}", _class.Name, color, "{"));
 
             var definedMembers = _class.Members.InnerList.Where(x => !x.IsInherited).OrderBy(x => x.Name).ToArray();
@@ -48,7 +66,7 @@ namespace NPlant.MetaModel.ClassDiagramming
 
             buffer.AppendLine("    }");
 
-            var note = _class.MetaModel.Note != null ? _class.MetaModel.Note.ToString() : null;
+            var note = _class.MetaModel.Note?.ToString();
 
             if (note != null)
             {
@@ -56,8 +74,12 @@ namespace NPlant.MetaModel.ClassDiagramming
             }
 
             return buffer.ToString();
-
         }
+
+        #endregion
+
+        #region Methods
+
         private bool IsBaseClassVisible(ClassDescriptor @class, ClassDiagramVisitorContext context)
         {
             if (_diagram.RootClasses.InnerList.Any(x => x.ReflectedType == @class.ReflectedType.BaseType))
@@ -69,25 +91,25 @@ namespace NPlant.MetaModel.ClassDiagramming
             return false;
         }
 
-        private void WriteClassMembers(IEnumerable<ClassMemberDescriptor> members, StringBuilder buffer)
+        private static void WriteClassMembers(IEnumerable<ClassMemberDescriptor> members, StringBuilder buffer)
         {
             foreach (var member in members.Where(member => member.IsVisible))
             {
                 if (member.MetaModel.IsPrimitive || member.TreatAsPrimitive)
                 {
-                    string accessModifier = member.AccessModifier.Notation;
-                    string typeName = member.MetaModel.Name;
-                    string memberName = member.Name;
+                    var accessModifier = member.AccessModifier.Notation;
+                    var typeName = member.MetaModel.Name;
+                    var memberName = member.Name;
 
                     buffer.AppendLine("    {0}{1} {2}".FormatWith(accessModifier, typeName, memberName));
                 }
                 else if (member.MetaModel.IsComplexType && member.MemberType.IsEnumerable())
                 {
-                    if (member.MemberType.GetEnumeratorType().IsPrimitive || member.MemberType.GetEnumeratorType() == typeof(String))
+                    if (member.MemberType.GetEnumeratorType().IsPrimitive || member.MemberType.GetEnumeratorType() == typeof(string))
                     {
-                        string accessModifier = member.AccessModifier.Notation;
-                        string typeName = member.MetaModel.Name;
-                        string memberName = member.Name;
+                        var accessModifier = member.AccessModifier.Notation;
+                        var typeName = member.MetaModel.Name;
+                        var memberName = member.Name;
 
                         buffer.AppendLine("    {0}{1} {2}".FormatWith(accessModifier, typeName, memberName));
                     }
@@ -95,19 +117,21 @@ namespace NPlant.MetaModel.ClassDiagramming
             }
         }
 
-        private void WriteClassMethods(IEnumerable<ClassMethodDescriptor> methods, StringBuilder buffer)
+        private static void WriteClassMethods(IEnumerable<ClassMethodDescriptor> methods, StringBuilder buffer)
         {
             if (methods != null)
             {
                 foreach (var method in methods)
                 {
-                    string accessModifier = method.AccessModifier.Notation;
-                    string methodName = method.Name;
-                    string args = method.Arguments;
+                    var accessModifier = method.AccessModifier.Notation;
+                    var methodName = method.Name;
+                    var args = method.Arguments;
 
                     buffer.AppendLine("    {0}{1}({2})".FormatWith(accessModifier, methodName, args));
                 }
             }
         }
+
+        #endregion
     }
 }

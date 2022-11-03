@@ -1,14 +1,23 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="CommandLineMapper.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+
 using NPlant.Console.Exceptions;
 
 namespace NPlant.Console
 {
     public static class CommandLineMapper
     {
+        #region Public Methods and Operators
+
         public static void Map<T>(T instance, string[] args)
         {
             var properties = new HashSet<PropertyInfo>(typeof(T).GetProperties(BindingFlags.Instance | BindingFlags.Public));
@@ -20,7 +29,7 @@ namespace NPlant.Console
                 string argName = argParts.First();
                 string argValue = null;
 
-                if(argParts.Length > 1)
+                if (argParts.Length > 1)
                     argValue = string.Join(":", argParts.Where((argPart, index) => index > 0));
 
                 if (!argName.StartsWith("--"))
@@ -38,7 +47,7 @@ namespace NPlant.Console
 
                     try
                     {
-                        if(argValue.StartsWith("\"") && argValue.EndsWith("\""))
+                        if (argValue.StartsWith("\"") && argValue.EndsWith("\""))
                             argValue = argValue.Substring(1, argValue.Length - 2);
 
                         property.SetValue(instance, converter.ConvertFromInvariantString(argValue), null);
@@ -63,5 +72,7 @@ namespace NPlant.Console
                     throw new ConsoleUsageException(string.Format("Expected argument '--{0}', but was not received", property.Name.ToLower()));
             }
         }
+
+        #endregion
     }
 }

@@ -21,7 +21,7 @@ namespace NPlant.Console
 {
     public class Program
     {
-        #region Methods
+        #region Public Methods and Operators
 
         public static int Main(string[] args)
         {

@@ -1,33 +1,59 @@
-﻿namespace NPlant.Samples.Hiding
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="SimpleHidingClassDiagram.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+namespace NPlant.Samples.Hiding
 {
     public class SimpleHidingClassDiagram : ClassDiagram
     {
+        #region Constructors and Destructors
+
         public SimpleHidingClassDiagram()
         {
-            this.AddClass<SimpleEntity>().ForMember(x => x.Bar).Hide();
-            this.AddClass<SimpleEntity2>();
-            this.GenerationOptions.ForType<BahEntity>().Hide();
+            AddClass<SimpleEntity>().ForMember(x => x.Bar).Hide();
+            AddClass<SimpleEntity2>();
+            GenerationOptions.ForType<BahEntity>().Hide();
 
-            this.AddNote("Bar is not displayed as a member of SimpleEntity.  Bah is no where.");
+            AddNote("Bar is not displayed as a member of SimpleEntity.  Bah is no where.");
+        }
+
+        #endregion
+
+        public class BahEntity
+        {
+            #region Fields
+
+            public string Something;
+
+            #endregion
         }
 
         public class SimpleEntity
         {
-            public string Foo;
-            public string Bar;
-            public string Baz;
+            #region Fields
+
             public BahEntity Bah;
+
+            public string Bar;
+
+            public string Baz;
+
+            public string Foo;
+
+            #endregion
         }
 
         public class SimpleEntity2
         {
-            public string Foo;
-            public BahEntity Bah;
-        }
+            #region Fields
 
-        public class BahEntity
-        {
-            public string Something;
+            public BahEntity Bah;
+
+            public string Foo;
+
+            #endregion
         }
     }
 }

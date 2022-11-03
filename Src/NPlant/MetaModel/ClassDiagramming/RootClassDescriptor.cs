@@ -1,27 +1,38 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="RootClassDescriptor.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using System.Linq.Expressions;
 using System.Reflection;
+
 using NPlant.Core;
 
 namespace NPlant.MetaModel.ClassDiagramming
 {
     public class RootClassDescriptor<T> : ClassDescriptor
     {
-        public RootClassDescriptor() : base(typeof(T))
+        #region Constructors and Destructors
+
+        public RootClassDescriptor()
+            : base(typeof(T))
         {
         }
 
-        public RootClassDescriptor<T> Named(string name)
+        #endregion
+
+        #region Public Methods and Operators
+
+        public ForMemberDescriptor<T> ForMember<TMember>(Expression<Func<T, TMember>> expression)
         {
-            this.Name = name;
-            return this;
+            return new ForMemberDescriptor<T>(this, ReflectOn<T>.ForMember(expression));
         }
 
-
-        public RootClassDescriptor<T> ShowInheritors()
+        public override IDescriptorWriter GetWriter(ClassDiagram diagram)
         {
-            this.RenderInheritance = true;
-            return this;
+            return new ClassWriter(diagram, this);
         }
 
         public RootClassDescriptor<T> HideInheritors()
@@ -45,20 +56,45 @@ namespace NPlant.MetaModel.ClassDiagramming
             return this;
         }
 
-        public ForMemberDescriptor<T> ForMember<TMember>(Expression<Func<T, TMember>> expression)
+        public RootClassDescriptor<T> Named(string name)
         {
-            return new ForMemberDescriptor<T>(this, ReflectOn<T>.ForMember(expression));
+            this.Name = name;
+            return this;
         }
+
+        public RootClassDescriptor<T> ShowInheritors()
+        {
+            this.RenderInheritance = true;
+            return this;
+        }
+
+        #endregion
 
         public class ForMemberDescriptor<TMember>
         {
+            #region Fields
+
             private readonly ClassDescriptor _descriptor;
+
             private readonly MemberInfo _member;
+
+            #endregion
+
+            #region Constructors and Destructors
 
             public ForMemberDescriptor(ClassDescriptor descriptor, MemberInfo member)
             {
                 _descriptor = descriptor;
                 _member = member;
+            }
+
+            #endregion
+
+            #region Public Methods and Operators
+
+            public ForMemberDescriptor<TMember> CustomerDiagram<TForMember>(Expression<Func<TMember, TForMember>> expression)
+            {
+                return new ForMemberDescriptor<TMember>(_descriptor, ReflectOn<TMember>.ForMember(expression));
             }
 
             public ForMemberDescriptor<TMember> Hide()
@@ -67,15 +103,7 @@ namespace NPlant.MetaModel.ClassDiagramming
                 return this;
             }
 
-            public ForMemberDescriptor<TMember> CustomerDiagram<TForMember>(Expression<Func<TMember, TForMember>> expression)
-            {
-                return new ForMemberDescriptor<TMember>(_descriptor, ReflectOn<TMember>.ForMember(expression));
-            }
-        }
-
-        public override IDescriptorWriter GetWriter(ClassDiagram diagram)
-        {
-            return new ClassWriter(diagram, this);
+            #endregion
         }
     }
 }

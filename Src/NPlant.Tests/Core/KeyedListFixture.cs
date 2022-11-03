@@ -1,4 +1,11 @@
-﻿using NPlant.Core;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="KeyedListFixture.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+using NPlant.Core;
+
 using NUnit.Framework;
 
 namespace NPlant.Tests.Core
@@ -6,6 +13,24 @@ namespace NPlant.Tests.Core
     [TestFixture]
     public class KeyedListFixture
     {
+        #region Public Methods and Operators
+
+        [Test]
+        public void AddRange_Is_Treated_As_Many_Adds()
+        {
+            var list = new KeyedList<Subject>();
+
+            var a = new Subject("a");
+            var b = new Subject("b");
+            var c = new Subject("c");
+            var d = new Subject("d");
+
+            list.AddRange(a, b, c, d);
+
+            Assert.That(list.Count, Is.EqualTo(4));
+            Assert.That(list["b"], Is.EqualTo(b));
+        }
+
         [Test]
         public void Can_Do_Simple_Adds_Like_A_Regular_List()
         {
@@ -53,30 +78,24 @@ namespace NPlant.Tests.Core
             Assert.That(list["b"], Is.EqualTo(b));
         }
 
-        [Test]
-        public void AddRange_Is_Treated_As_Many_Adds()
-        {
-            var list = new KeyedList<Subject>();
-
-            var a = new Subject("a");
-            var b = new Subject("b");
-            var c = new Subject("c");
-            var d = new Subject("d");
-
-            list.AddRange(a, b, c, d);
-
-            Assert.That(list.Count, Is.EqualTo(4));
-            Assert.That(list["b"], Is.EqualTo(b));
-        }
+        #endregion
 
         public class Subject : IKeyedItem
         {
+            #region Constructors and Destructors
+
             public Subject(string key)
             {
                 Key = key;
             }
 
+            #endregion
+
+            #region Public Properties
+
             public string Key { get; private set; }
+
+            #endregion
         }
     }
 }

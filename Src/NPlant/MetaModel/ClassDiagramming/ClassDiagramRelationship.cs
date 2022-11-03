@@ -20,9 +20,7 @@
 
         public override bool Equals(object obj)
         {
-            ClassDiagramRelationship relationship = obj as ClassDiagramRelationship;
-
-            if (relationship == null)
+            if (obj is not ClassDiagramRelationship relationship)
                 return false;
 
             return object.Equals(relationship.Party1, this.Party1) &&
@@ -32,7 +30,7 @@
 
         public override int GetHashCode()
         {
-            return this.Party1.GetHashCode() + this.Party2.GetHashCode() + this.Name.GetHashCode();
+            return Party1.GetHashCode() + Party2.GetHashCode() + Name.GetHashCode();
         }
     }
 

@@ -1,5 +1,12 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="GetEnumeratorTypeFixture.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
+
 using NUnit.Framework;
 
 namespace NPlant.Tests.Reflection
@@ -7,6 +14,14 @@ namespace NPlant.Tests.Reflection
     [TestFixture]
     public class GetEnumeratorTypeFixture
     {
+        #region Public Methods and Operators
+
+        [TestCase(typeof(object), typeof(object))]
+        public void Exceptionals(Type input, Type expected)
+        {
+            Assert.Throws<ArgumentException>(() => Assert.That(input.GetEnumeratorType(), Is.EqualTo(expected)));
+        }
+
         [TestCase(typeof(object[]), typeof(object))]
         [TestCase(typeof(string[]), typeof(string))]
         [TestCase(typeof(FooList), typeof(Foo))]
@@ -18,14 +33,14 @@ namespace NPlant.Tests.Reflection
             Assert.That(input.GetEnumeratorType(), Is.EqualTo(expected));
         }
 
-        [TestCase(typeof(object), typeof(object))]
-        public void Exceptionals(Type input, Type expected)
+        #endregion
+
+        internal class Foo
         {
-            Assert.Throws<ArgumentException>(() => Assert.That(input.GetEnumeratorType(), Is.EqualTo(expected)));
         }
 
-        internal class FooList : List<Foo>{}
-
-        internal class Foo{}
+        internal class FooList : List<Foo>
+        {
+        }
     }
 }

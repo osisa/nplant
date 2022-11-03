@@ -23,7 +23,7 @@ namespace NPlant.UI
 
         public static int Raise<T>(T @event)
         {
-            int count = 0;
+            var count = 0;
 
             if (_actions != null)
             {

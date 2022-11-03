@@ -1,3 +1,9 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="CommandLineArgs.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
 using System.ComponentModel;
 using System.Drawing.Imaging;
 
@@ -5,8 +11,15 @@ namespace NPlant.Console
 {
     public class CommandLineArgs
     {
+        #region Fields
+
         private string _format;
+
         private ImageFormat _imageFormat;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         public CommandLineArgs(string[] args)
         {
@@ -15,20 +28,19 @@ namespace NPlant.Console
             CommandLineMapper.Map(this, args);
         }
 
-        [RequiredArgument]
-        public string Assembly { get; protected set; }
+        #endregion
+
+        #region Public Properties
+
+        [RequiredArgument] public string Assembly { get; protected set; }
+
+        public bool Debugger { get; protected set; }
 
         public string Diagram { get; protected set; }
 
-        public string Java { get; protected set; }
-
-        public string Jar { get; protected set; }
-
-        public string Output { get; protected set; }
-
         public string Format
         {
-            get { return _format; }
+            get => _format;
             protected set
             {
                 _format = value;
@@ -42,11 +54,21 @@ namespace NPlant.Console
             }
         }
 
-        public bool Debugger { get; protected set; }
+        public string Jar { get; protected set; }
+
+        public string Java { get; protected set; }
+
+        public string Output { get; protected set; }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         public ImageFormat GetImageFormat()
         {
             return _imageFormat;
         }
+
+        #endregion
     }
 }

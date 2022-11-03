@@ -1,4 +1,11 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="DiagramsElement.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+using System;
+
 using NAnt.Core;
 using NAnt.Core.Attributes;
 
@@ -7,16 +14,24 @@ namespace NPlant.NAntTasks
     [Serializable]
     public class DiagramsElement : Element
     {
-        private DiagramElementCollection _diagrams = new DiagramElementCollection();
+        #region Fields
 
-        [TaskAttribute("in", Required = false)]
-        public string In { get; set; }
+        private DiagramElementCollection _diagrams = new ();
+
+        #endregion
+
+        #region Public Properties
 
         [BuildElementArray("diagram")]
         public virtual DiagramElementCollection Diagrams
         {
-            get { return _diagrams; }
-            set { _diagrams = value; }
+            get => _diagrams;
+            set => _diagrams = value;
         }
+
+        [TaskAttribute("in", Required = false)]
+        public string In { get; set; }
+
+        #endregion
     }
 }

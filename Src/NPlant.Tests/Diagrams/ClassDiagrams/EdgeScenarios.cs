@@ -1,6 +1,14 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="EdgeScenarios.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+using System;
+
 using NPlant.MetaModel.ClassDiagramming;
 using NPlant.Samples.CircularReferences;
+
 using NUnit.Framework;
 
 namespace NPlant.Tests.Diagrams.ClassDiagrams
@@ -8,6 +16,8 @@ namespace NPlant.Tests.Diagrams.ClassDiagrams
     [TestFixture]
     public class EdgetScenarios
     {
+        #region Public Methods and Operators
+
         [Test]
         public void Circular_References_Dont_Create_Multiple_Classes()
         {
@@ -22,6 +32,7 @@ namespace NPlant.Tests.Diagrams.ClassDiagrams
 
             Assert.That(simulation.Classes["Baz"].Members["TheFoo"].MemberType, Is.EqualTo(typeof(Foo)));
         }
-    }
 
+        #endregion
+    }
 }

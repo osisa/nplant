@@ -1,59 +1,37 @@
-﻿using NAnt.Core;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="NPlantTask.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+using NAnt.Core;
 using NAnt.Core.Attributes;
+
 using NPlant.Core;
 using NPlant.Generation;
-
-using Task = NAnt.Core.Task;
 
 namespace NPlant.NAntTasks
 {
     [TaskName("nplant")]
     public class NPlantTask : Task, INPlantRunnerOptions
     {
-        private DiagramsElement _diagramsElement = new DiagramsElement();
+        #region Fields
+
         private string _categorize;
 
-        protected override void ExecuteTask()
-        {
-            Level old = Project.Threshold;
-            AssignLogLevel(Level.Debug);
+        private DiagramsElement _diagramsElement = new DiagramsElement();
 
-            var runner = new NPlantRunner(this, () => new NAntRunnerRecorder(this, this.Property, this.Delimiter));
-            runner.Run();
+        #endregion
 
-            AssignLogLevel(old);
-        }
-
-        private void AssignLogLevel(Level newLevel)
-        {
-            foreach (IBuildListener listener in Project.BuildListeners)
-            {
-                IBuildLogger logger = listener as IBuildLogger;
-
-                if (logger != null)
-                    logger.Threshold = newLevel;
-            }
-        }
-
-        [TaskAttribute("property", Required = false)]
-        public string Property { get; set; }
-
-        [TaskAttribute("clean", Required = false)]
-        public string Clean { get; set; }
-
-        [TaskAttribute("delim", Required = false)]
-        public string Delimiter { get; set; }
+        #region Public Properties
 
         [TaskAttribute("assembly", Required = true)]
         public string AssemblyToScan { get; set; }
 
-        [TaskAttribute("dir", Required = false)]
-        public string OutputDirectory { get; set; }
-
         [TaskAttribute("categorize", Required = false)]
         public string Categorize
         {
-            get { return _categorize; }
+            get => _categorize;
             set
             {
                 switch (value)
@@ -69,19 +47,57 @@ namespace NPlant.NAntTasks
             }
         }
 
-        public NPlantCategorizations ParsedCategorized { get; set; }
+        [TaskAttribute("clean", Required = false)]
+        public string Clean { get; set; }
 
-        [TaskAttribute("java", Required = false)]
-        public string JavaPath { get; set; }
-
-        [TaskAttribute("plantuml", Required = false)]
-        public string PlantUml { get; set; }
+        [TaskAttribute("delim", Required = false)]
+        public string Delimiter { get; set; }
 
         [BuildElement("diagrams", Required = false)]
         public DiagramsElement DiagramsElement
         {
-            get { return _diagramsElement; }
-            set { _diagramsElement = value; }
+            get => _diagramsElement;
+            set => _diagramsElement = value;
         }
+
+        [TaskAttribute("java", Required = false)]
+        public string JavaPath { get; set; }
+
+        [TaskAttribute("dir", Required = false)]
+        public string OutputDirectory { get; set; }
+
+        public NPlantCategorizations ParsedCategorized { get; set; }
+
+        [TaskAttribute("plantuml", Required = false)]
+        public string PlantUml { get; set; }
+
+        [TaskAttribute("property", Required = false)]
+        public string Property { get; set; }
+
+        #endregion
+
+        #region Methods
+
+        protected override void ExecuteTask()
+        {
+            var old = Project.Threshold;
+            AssignLogLevel(Level.Debug);
+
+            var runner = new NPlantRunner(this, () => new NAntRunnerRecorder(this, Property, Delimiter));
+            runner.Run();
+
+            AssignLogLevel(old);
+        }
+
+        private void AssignLogLevel(Level newLevel)
+        {
+            foreach (var listener in Project.BuildListeners)
+            {
+                if (listener is IBuildLogger logger)
+                    logger.Threshold = newLevel;
+            }
+        }
+
+        #endregion
     }
 }

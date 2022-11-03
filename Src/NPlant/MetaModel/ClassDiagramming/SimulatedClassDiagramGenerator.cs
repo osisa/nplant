@@ -1,16 +1,49 @@
-﻿using NPlant.Core;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="SimulatedClassDiagramGenerator.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+using NPlant.Core;
 using NPlant.Generation.ClassDiagramming;
 
 namespace NPlant.MetaModel.ClassDiagramming
 {
     public class SimulatedClassDiagramGenerator : ClassDiagramGenerator
     {
-        private readonly ClassDiagram _definition;
+        #region Fields
+
         private readonly KeyedList<ClassDescriptor> _classes = new KeyedList<ClassDescriptor>();
 
-        public SimulatedClassDiagramGenerator(ClassDiagram diagram) : base(diagram)
+        private readonly ClassDiagram _definition;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        public SimulatedClassDiagramGenerator(ClassDiagram diagram)
+            : base(diagram)
         {
             _definition = diagram;
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        public KeyedList<ClassDescriptor> Classes 
+            => _classes;
+
+        public TypeMetaModelSet Types 
+            => _definition.Types;
+
+        #endregion
+
+        #region Methods
+
+        protected override void Finalize(ClassDiagramVisitorContext current)
+        {
+            _classes.AddRange(current.VisitedRelatedClasses);
         }
 
         protected override void OnRootClassVisited(ClassDescriptor rootClass)
@@ -18,19 +51,6 @@ namespace NPlant.MetaModel.ClassDiagramming
             _classes.Add(rootClass);
         }
 
-        public KeyedList<ClassDescriptor> Classes
-        {
-            get { return _classes; }
-        }
-
-        public TypeMetaModelSet Types
-        {
-            get { return _definition.Types; }
-        }
-
-        protected override void Finalize(ClassDiagramVisitorContext current)
-        {
-            _classes.AddRange(current.VisitedRelatedClasses);
-        }
+        #endregion
     }
 }

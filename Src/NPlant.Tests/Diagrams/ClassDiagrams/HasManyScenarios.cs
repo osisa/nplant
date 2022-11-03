@@ -1,5 +1,13 @@
-﻿using System.Collections.Generic;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="HasManyScenarios.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+using System.Collections.Generic;
+
 using NPlant.MetaModel.ClassDiagramming;
+
 using NUnit.Framework;
 
 namespace NPlant.Tests.ClassDiagrams
@@ -7,6 +15,8 @@ namespace NPlant.Tests.ClassDiagrams
     [TestFixture]
     public class HasManyScenarios
     {
+        #region Public Methods and Operators
+
         [Test]
         public void TestPersonHasHands()
         {
@@ -18,22 +28,31 @@ namespace NPlant.Tests.ClassDiagrams
             Assert.That(simulation.Classes[1].Name, Is.EqualTo("Hand"));
         }
 
-        public class SimpleHasManyDiagram : ClassDiagram
+        #endregion
+
+        public class Hand
         {
-            public SimpleHasManyDiagram()
-            {
-                this.AddClass<Person>();
-            }
         }
 
         public class Person
         {
+            #region Public Properties
+
             public IList<Hand> Hands { get; set; }
+
+            #endregion
         }
 
-        public class Hand
+        public class SimpleHasManyDiagram : ClassDiagram
         {
-            
+            #region Constructors and Destructors
+
+            public SimpleHasManyDiagram()
+            {
+                this.AddClass<Person>();
+            }
+
+            #endregion
         }
     }
 }

@@ -1,5 +1,13 @@
-﻿using System.Collections.Generic;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="SuppressionFixture.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+using System.Collections.Generic;
+
 using NPlant.MetaModel.ClassDiagramming;
+
 using NUnit.Framework;
 
 namespace NPlant.Tests.Diagrams.ClassDiagrams
@@ -7,6 +15,8 @@ namespace NPlant.Tests.Diagrams.ClassDiagrams
     [TestFixture]
     public class SuppressionFixture
     {
+        #region Public Methods and Operators
+
         [Test]
         public void Can_Completely_Hide_A_Type_From_The_Diagram()
         {
@@ -49,41 +59,66 @@ namespace NPlant.Tests.Diagrams.ClassDiagrams
             Assert.That(simulation.Classes["Child2"].Members["Child"].MetaModel.Hidden, Is.False);
         }
 
-        internal class Diagram : ClassDiagram
-        {
-            public Diagram()
-            {
-                AddClass<Subject>();
-            }
-        }
+        #endregion
 
-        public class Subject
-        {
-            public Child1 Child;
-            public string Code;
-            public StringCollection Codes;
-        }
-
-        public class StringCollection : List<string>
-        {
-            
-        }
         public class Child1
         {
+            #region Fields
+
             public Child2 Child;
+
             public StringCollection Codes;
+
+            #endregion
         }
 
         public class Child2
         {
+            #region Fields
+
             public Child3 Child;
+
             public StringCollection Codes;
+
+            #endregion
         }
 
         public class Child3
         {
+            #region Fields
+
             public StringCollection Codes;
-            
+
+            #endregion
+        }
+
+        public class StringCollection : List<string>
+        {
+        }
+
+        public class Subject
+        {
+            #region Fields
+
+            public Child1 Child;
+
+            public string Code;
+
+            public StringCollection Codes;
+
+            #endregion
+        }
+
+        internal class Diagram : ClassDiagram
+        {
+            #region Constructors and Destructors
+
+            public Diagram()
+            {
+                AddClass<Subject>();
+            }
+
+            #endregion
         }
     }
 }

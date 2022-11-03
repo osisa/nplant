@@ -1,4 +1,10 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="ClassDescriptor_MemberScan_Fixture.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 
@@ -13,6 +19,8 @@ namespace NPlant.Tests.Diagramming
     [TestFixture]
     public class ClassDescriptor_MemberScan_Fixture
     {
+        #region Public Methods and Operators
+
         [TestCase(typeof(PublicMembersOnly), ClassDiagramScanModes.PublicMembersOnly, new string[] { "Foo" })]
         [TestCase(typeof(AllMembers), ClassDiagramScanModes.AllMembers, new[] { "Foo", "Moo", "Bar", "Baz" })]
         [TestCase(typeof(DataContractSubject), ClassDiagramScanModes.SystemServiceModelMember, new[] { "Foo", "Baz" })]
@@ -36,120 +44,163 @@ namespace NPlant.Tests.Diagramming
             }
         }
 
-        public class PublicMembersOnly
-        {
-            public string Foo;
-
-            // should not be scanned in
-            protected string Moo;
-
-            // should not be scanned in
-            private string Bar = "";
-
-            // should not be scanned in
-            internal string Baz = "";
-
-            public override string ToString()
-            {
-                // use Bar to get rid of "Warning as Error ... is never used" error. 
-                return Bar;
-            }
-        }
-
+        #endregion
 
         public class AllMembers
         {
+            #region Fields
+
             public string Foo;
+
+            internal string Baz = "";
 
             protected string Moo;
 
             private string Bar = "";
 
-            internal string Baz = "";
+            #endregion
+
+            #region Public Methods and Operators
 
             public override string ToString()
             {
                 // use Bar to get rid of "Warning as Error ... is never used" errors. 
                 return Bar;
             }
+
+            #endregion
         }
 
         [DataContract]
         public class DataContractSubject
         {
-            [DataMember]
-            public string Foo { get; set; }
+            #region Public Properties
 
             // should not be scanned in
             public string Bar { get; set; }
 
-            [DataMember]
-            public string Baz { get; set; }
-        }
+            [DataMember] public string Baz { get; set; }
 
-        [MessageContract]
-        public class MessageContractSubject
-        {
-            [MessageBodyMember]
-            public string Foo { get; set; }
+            [DataMember] public string Foo { get; set; }
 
-            // should not be scanned in
-            public string Bar { get; set; }
-
-            [MessageBodyMember]
-            public string Baz { get; set; }
+            #endregion
         }
 
         [DataContract]
         public class FieldDataContractSubject
         {
-            [DataMember]
-            public string Foo;
+            #region Fields
 
             // should not be scanned in
             public string Bar;
 
             [DataMember]
             public string Baz;
+
+            [DataMember]
+            public string Foo;
+
+            #endregion
         }
 
         [MessageContract]
         public class FieldMessageContractSubject
         {
-            [MessageBodyMember]
-            public string Foo;
+            #region Fields
 
             // should not be scanned in
             public string Bar;
 
             [MessageBodyMember]
             public string Baz;
+
+            [MessageBodyMember]
+            public string Foo;
+
+            #endregion
         }
 
         [DataContract]
         public class FieldPropertyHybridDataContractSubject
         {
-            [DataMember]
-            public string Foo;
+            #region Fields
 
             // should not be scanned in
             public string Bar;
 
             [DataMember]
-            public string Baz { get; set; }
+            public string Foo;
+
+            #endregion
+
+            #region Public Properties
+
+            [DataMember] public string Baz { get; set; }
+
+            #endregion
         }
 
         [MessageContract]
         public class FieldPropertyHybridMessageContractSubject
         {
-            [MessageBodyMember]
-            public string Foo;
+            #region Fields
 
             // should not be scanned in
             public string Bar;
 
             [MessageBodyMember]
-            public string Baz { get; set; }
+            public string Foo;
+
+            #endregion
+
+            #region Public Properties
+
+            [MessageBodyMember] public string Baz { get; set; }
+
+            #endregion
+        }
+
+        [MessageContract]
+        public class MessageContractSubject
+        {
+            #region Public Properties
+
+            // should not be scanned in
+            public string Bar { get; set; }
+
+            [MessageBodyMember] public string Baz { get; set; }
+
+            [MessageBodyMember] public string Foo { get; set; }
+
+            #endregion
+        }
+
+        public class PublicMembersOnly
+        {
+            #region Fields
+
+            public string Foo;
+
+            // should not be scanned in
+            internal string Baz = "";
+
+            // should not be scanned in
+            protected string Moo;
+
+            // should not be scanned in
+            private string Bar = "";
+
+            #endregion
+
+            #region Public Methods and Operators
+
+            public override string ToString()
+            {
+                // use Bar to get rid of "Warning as Error ... is never used" error. 
+                return Bar;
+            }
+
+            #endregion
         }
     }
 }
