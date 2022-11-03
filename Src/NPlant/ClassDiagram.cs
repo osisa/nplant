@@ -34,7 +34,7 @@ namespace NPlant
             if (types != null)
             {
                 foreach (var t in types)
-                    this.AddClass(t.GetReflected());
+                    AddClass(t.GetReflected());
             }
         }
 
@@ -43,13 +43,13 @@ namespace NPlant
         {
             type.CheckForNullArg("type");
 
-            this.AddClass(type.GetReflected());
+            AddClass(type.GetReflected());
         }
 
         public ClassDiagram()
         {
             GenerationOptions = new ClassDiagramOptions(this);
-            Name = this.GetType().Name;
+            Name = GetType().Name;
         }
 
         #endregion
@@ -138,7 +138,7 @@ namespace NPlant
             var descriptor = type.GetReflected();
 
             descriptor.SetLevel(level);
-            this.AddClass(descriptor);
+            AddClass(descriptor);
         }
 
         internal IDiagramFormatter CreateFormatter(ClassDiagramVisitorContext context)
@@ -146,7 +146,7 @@ namespace NPlant
             return new ClassDiagramFormatter(this, context);
         }
 
-        internal string GetClassColor(ClassDescriptor @class)
+        internal static string GetClassColor(ClassDescriptor @class)
         {
             return null;
         }
@@ -160,7 +160,7 @@ namespace NPlant
                 var types = assembly.Assembly.GetTypesExtending<T>();
 
                 foreach (var type in types)
-                    this.AddClass(type.GetReflected(), false);
+                    AddClass(type.GetReflected(), false);
             }
 
             return this;
@@ -181,7 +181,7 @@ namespace NPlant
         {
             var classDescriptor = new RootClassDescriptor<T>();
 
-            this.AddClass(classDescriptor);
+            AddClass(classDescriptor);
             RootClasses.Add(classDescriptor);
 
             return classDescriptor;
@@ -191,7 +191,7 @@ namespace NPlant
         {
             var classDescriptor = new RootEnumDescriptor(typeof(T));
 
-            this.AddClass(classDescriptor);
+            AddClass(classDescriptor);
             RootClasses.Add(classDescriptor);
 
             return classDescriptor;

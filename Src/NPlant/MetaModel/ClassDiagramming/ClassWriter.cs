@@ -36,7 +36,7 @@ namespace NPlant.MetaModel.ClassDiagramming
 
         public string Write(ClassDiagramVisitorContext context)
         {
-            var color = _class.Color ?? _diagram.GetClassColor(_class);
+            var color = _class.Color ?? ClassDiagram.GetClassColor(_class);
             var buffer = new StringBuilder();
 
             if (_class.ReflectedType.IsInterface)

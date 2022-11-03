@@ -19,8 +19,6 @@ namespace NPlant.NAntTasks
 
         private string _categorize;
 
-        private DiagramsElement _diagramsElement = new DiagramsElement();
-
         #endregion
 
         #region Public Properties
@@ -54,11 +52,7 @@ namespace NPlant.NAntTasks
         public string Delimiter { get; set; }
 
         [BuildElement("diagrams", Required = false)]
-        public DiagramsElement DiagramsElement
-        {
-            get => _diagramsElement;
-            set => _diagramsElement = value;
-        }
+        public DiagramsElement DiagramsElement { get; set; } = new ();
 
         [TaskAttribute("java", Required = false)]
         public string JavaPath { get; set; }

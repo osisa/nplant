@@ -1,7 +1,13 @@
-using System;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="ClassDiagramFormatter.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
 using NPlant.Core;
 using NPlant.MetaModel.ClassDiagramming;
 
@@ -9,9 +15,17 @@ namespace NPlant.Generation.ClassDiagramming
 {
     public class ClassDiagramFormatter : IDiagramFormatter
     {
+        #region Fields
+
         private readonly StringBuilder _buffer = new StringBuilder();
+
         private readonly ClassDiagramVisitorContext _context;
+
         private readonly ClassDiagram _diagram;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         public ClassDiagramFormatter(ClassDiagram diagram, ClassDiagramVisitorContext context)
         {
@@ -19,20 +33,24 @@ namespace NPlant.Generation.ClassDiagramming
             _context = context;
         }
 
+        #endregion
+
+        #region Public Methods and Operators
+
         public string Format()
         {
             _buffer.AppendLine("@startuml");
 
             WriteTitle(_diagram.Title);
 
-            List<string> unpackaged = new List<string>();
-            Dictionary<string, List<string>> packageMap = new Dictionary<string, List<string>>();
+            var unpacked = new List<string>();
+            var packageMap = new Dictionary<string, List<string>>();
 
-            WriteRootClasses(packageMap, unpackaged);
+            WriteRootClasses(packageMap, unpacked);
 
-            WriteRelatedClasses(packageMap, unpackaged);
+            WriteRelatedClasses(packageMap, unpacked);
 
-            WritePackages(packageMap, unpackaged);
+            WritePackages(packageMap, unpacked);
 
             WriteRelationships();
 
@@ -45,39 +63,31 @@ namespace NPlant.Generation.ClassDiagramming
             return _buffer.ToString();
         }
 
-        private void WriteRelationships()
-        {
-            _buffer.AppendLine();
-            _buffer.AppendLine();
+        #endregion
 
-            foreach (var relationship in _context.Relationships)
+        #region Methods
+
+        private void AppendClassToPackageMap(
+            Dictionary<string, List<string>> packageMap,
+            string package,
+            string classDefinition)
+        {
+            List<string> classDefinitions;
+
+            if (!packageMap.TryGetValue(package, out classDefinitions))
             {
-                WriteClassRelationship(relationship);
+                classDefinitions = new List<string>();
+                packageMap.Add(package, classDefinitions);
             }
+
+            classDefinitions.Add(classDefinition);
         }
 
-        private void WriteRelatedClasses(Dictionary<string, List<string>> packageMap, List<string> unpackaged)
-        {
-            foreach (var relatedClass in _context.VisitedRelatedClasses)
-            {
-                string classDefinition = WriteClassDefinition(relatedClass);
-
-                AssignToPackage(relatedClass, packageMap, classDefinition, unpackaged);
-            }
-        }
-
-        private void WriteRootClasses(Dictionary<string, List<string>> packageMap, List<string> unpackaged)
-        {
-            foreach (var rootClass in _diagram.RootClasses.InnerList)
-            {
-                string classDefinition = WriteClassDefinition(rootClass);
-
-                AssignToPackage(rootClass, packageMap, classDefinition, unpackaged);
-            }
-        }
-
-        private void AssignToPackage(ClassDescriptor rootClass, Dictionary<string, List<string>> packageMap,
-                                     string classDefinition, List<string> unpackaged)
+        private void AssignToPackage(
+            ClassDescriptor rootClass,
+            Dictionary<string, List<string>> packageMap,
+            string classDefinition,
+            List<string> unpackaged)
         {
             foreach (var package in _diagram.Packages)
             {
@@ -91,40 +101,51 @@ namespace NPlant.Generation.ClassDiagramming
             unpackaged.Add(classDefinition);
         }
 
-        private void WritePackages(Dictionary<string, List<string>> packageMap, IEnumerable<string> unpackaged)
+        private string WriteClassDefinition(ClassDescriptor @class)
         {
-            foreach (var key in packageMap.Keys)
-            {
-                var package = packageMap[key];
-
-                _buffer.AppendLine(string.Format("package \"{0}\"{1}", key, "{"));
-
-                foreach (var classDefinition in package)
-                {
-                    _buffer.AppendLine(classDefinition);
-                }
-
-                _buffer.AppendLine(string.Format("{0}", "}"));
-            }
-
-            foreach (var item in unpackaged)
-            {
-                _buffer.AppendLine(item);
-            }
+            IDescriptorWriter writer = @class.GetWriter(_diagram);
+            return writer.Write(_context);
         }
 
-        private void AppendClassToPackageMap(Dictionary<string, List<string>> packageMap, string package,
-                                             string classDefinition)
+        private void WriteClassRelationship(ClassDiagramRelationship relationship)
         {
-            List<string> classDefinitions;
+            string suffix = "";
+            string arrow = "";
 
-            if (!packageMap.TryGetValue(package, out classDefinitions))
+            switch (relationship.RelationshipType)
             {
-                classDefinitions = new List<string>();
-                packageMap.Add(package, classDefinitions);
+                case ClassDiagramRelationshipTypes.Base:
+                    arrow = "-up-|>";
+                    suffix = " : Extends";
+                    break;
+                case ClassDiagramRelationshipTypes.HasA:
+                    arrow = "*--";
+                    suffix = (relationship.Name.StartsWithAVowel() ? " : Has An \\n{0}" : " : Has A \\n{0}").FormatWith(relationship.Name);
+                    break;
+                case ClassDiagramRelationshipTypes.HasMany:
+                    arrow = "*--";
+                    suffix = " : Has Many \\n{0}".FormatWith(relationship.Name);
+                    break;
+                default:
+                    throw new NPlantException("Unrecognized relationship type:  {0}".FormatWith(relationship));
             }
 
-            classDefinitions.Add(classDefinition);
+            _buffer.AppendLine(
+                "\"{0}\" {1} \"{2}\"{3}".FormatWith(
+                    relationship.Party1.Name,
+                    arrow,
+                    relationship.Party2.Name,
+                    suffix));
+        }
+
+        private void WriteLegend(ClassDiagramLegend legend)
+        {
+            if (legend != null)
+            {
+                _buffer.AppendLine("legend {0}".FormatWith(legend.Position));
+                _buffer.AppendLine("    {0}".FormatWith(legend.Text));
+                _buffer.AppendLine("endlegend");
+            }
         }
 
         private void WriteNotes(IEnumerable<ClassDiagramNote> notes)
@@ -152,13 +173,56 @@ namespace NPlant.Generation.ClassDiagramming
             }
         }
 
-        private void WriteLegend(ClassDiagramLegend legend)
+        private void WritePackages(Dictionary<string, List<string>> packageMap, IEnumerable<string> unpackaged)
         {
-            if (legend != null)
+            foreach (var key in packageMap.Keys)
             {
-                _buffer.AppendLine("legend {0}".FormatWith(legend.Position));
-                _buffer.AppendLine("    {0}".FormatWith(legend.Text));
-                _buffer.AppendLine("endlegend");
+                var package = packageMap[key];
+
+                _buffer.AppendLine(string.Format("package \"{0}\"{1}", key, "{"));
+
+                foreach (var classDefinition in package)
+                {
+                    _buffer.AppendLine(classDefinition);
+                }
+
+                _buffer.AppendLine(string.Format("{0}", "}"));
+            }
+
+            foreach (var item in unpackaged)
+            {
+                _buffer.AppendLine(item);
+            }
+        }
+
+        private void WriteRelatedClasses(Dictionary<string, List<string>> packageMap, List<string> unpackaged)
+        {
+            foreach (var relatedClass in _context.VisitedRelatedClasses)
+            {
+                string classDefinition = WriteClassDefinition(relatedClass);
+
+                AssignToPackage(relatedClass, packageMap, classDefinition, unpackaged);
+            }
+        }
+
+        private void WriteRelationships()
+        {
+            _buffer.AppendLine();
+            _buffer.AppendLine();
+
+            foreach (var relationship in _context.Relationships)
+            {
+                WriteClassRelationship(relationship);
+            }
+        }
+
+        private void WriteRootClasses(Dictionary<string, List<string>> packageMap, List<string> unpackaged)
+        {
+            foreach (var rootClass in _diagram.RootClasses.InnerList)
+            {
+                string classDefinition = WriteClassDefinition(rootClass);
+
+                AssignToPackage(rootClass, packageMap, classDefinition, unpackaged);
             }
         }
 
@@ -170,37 +234,6 @@ namespace NPlant.Generation.ClassDiagramming
             }
         }
 
-        private void WriteClassRelationship(ClassDiagramRelationship relationship)
-        {
-            string suffix = "";
-            string arrow = "";
-
-            switch (relationship.RelationshipType)
-            {
-                case ClassDiagramRelationshipTypes.Base:
-                    arrow = "-up-|>";
-                    suffix = " : Extends";
-                    break;
-                case ClassDiagramRelationshipTypes.HasA:
-                    arrow = "*--";
-                    suffix = (relationship.Name.StartsWithAVowel() ? " : Has An \\n{0}" : " : Has A \\n{0}").FormatWith(relationship.Name);
-                    break;
-                case ClassDiagramRelationshipTypes.HasMany:
-                    arrow = "*--";
-                    suffix = " : Has Many \\n{0}".FormatWith(relationship.Name);
-                    break;
-                default:
-                    throw new NPlantException("Unrecognized relationship type:  {0}".FormatWith(relationship));
-            }
-
-            _buffer.AppendLine("\"{0}\" {1} \"{2}\"{3}".FormatWith(relationship.Party1.Name, arrow, relationship.Party2.Name,
-                                                           suffix));
-        }
-
-        private string WriteClassDefinition(ClassDescriptor @class)
-        {
-            IDescriptorWriter writer = @class.GetWriter(_diagram);
-            return writer.Write(_context);
-        }
+        #endregion
     }
 }
