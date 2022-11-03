@@ -1,6 +1,6 @@
 ﻿using System.Data.SqlTypes;
 using NPlant.Core;
-using NPlant.Generation.ClassDiagraming;
+using NPlant.Generation.ClassDiagramming;
 
 namespace NPlant.Tests.Diagraming
 {

@@ -1,5 +1,5 @@
 ﻿using NPlant.Core;
-using NPlant.Generation.ClassDiagraming;
+using NPlant.Generation.ClassDiagramming;
 
 namespace NPlant.MetaModel.ClassDiagraming
 {

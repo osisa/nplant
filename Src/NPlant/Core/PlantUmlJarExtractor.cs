@@ -1,10 +1,18 @@
-﻿using System.IO;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="PlantUmlJarExtractor.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+using System.IO;
 using System.Reflection;
 
 namespace NPlant.Core
 {
     public static class PlantUmlJarExtractor
     {
+        #region Public Methods and Operators
+
         public static string TryExtractTo(string dir)
         {
             string jarPath = Path.Combine(dir, "plantuml.jar");
@@ -17,7 +25,7 @@ namespace NPlant.Core
 
                 using (Stream input = assembly.GetManifestResourceStream(embeddedResourceFullName))
                 {
-                    if (input == null) throw new NPlantException(string.Format("Failed to find embedded resource '{0}' in assembly '{1}'",embeddedResourceFullName, assembly.FullName));
+                    if (input == null) throw new NPlantException(string.Format("Failed to find embedded resource '{0}' in assembly '{1}'", embeddedResourceFullName, assembly.FullName));
 
                     using (Stream output = File.Create(jarPath))
                     {
@@ -27,7 +35,11 @@ namespace NPlant.Core
             }
 
             return jarPath;
-            }
+        }
+
+        #endregion
+
+        #region Methods
 
         private static void CopyStream(Stream input, Stream output)
         {
@@ -39,5 +51,7 @@ namespace NPlant.Core
                 output.Write(buffer, 0, bytesRead);
             }
         }
+
+        #endregion
     }
 }

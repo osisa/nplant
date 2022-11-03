@@ -11,7 +11,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using NPlant.Core;
-using NPlant.Generation.ClassDiagraming;
+using NPlant.Generation.ClassDiagramming;
 using NPlant.MetaModel.ClassDiagraming;
 
 public static class ExtensionMethods

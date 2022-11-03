@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text;
-using NPlant.Generation.ClassDiagraming;
+using NPlant.Generation.ClassDiagramming;
 
 namespace NPlant.MetaModel.ClassDiagraming
 {

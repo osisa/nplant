@@ -1,7 +1,14 @@
-﻿using System.ComponentModel;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="CommandLineMapperFixture.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
 using System.Drawing.Imaging;
+
 using NPlant.Console;
 using NPlant.Console.Exceptions;
+
 using NUnit.Framework;
 
 namespace NPlant.Tests.Console
@@ -9,18 +16,7 @@ namespace NPlant.Tests.Console
     [TestFixture]
     public class CommandLineMapperFixture
     {
-        [TestCase("foo")]
-        [TestCase("foo:bar")]
-        [TestCase("-foo")]
-        [TestCase("-foo:bar")]
-        public void Invalid_Arg_Syntax_Should_Throw(string invalidArg)
-        {
-            Assert.Throws<ConsoleUsageException>(() =>
-            {
-                var subject = new StringsSubject();
-                CommandLineMapper.Map(subject, new[] { invalidArg });
-            });
-        }
+        #region Public Methods and Operators
 
         [Test]
         public void Can_Handle_Path_Values()
@@ -32,40 +28,10 @@ namespace NPlant.Tests.Console
         }
 
         [Test]
-        public void Invalid_Arg_Value_Should_Throw()
-        {
-            Assert.Throws<ConsoleUsageException>(() =>
-            {
-                var subject = new ComplexConverterSubject();
-                CommandLineMapper.Map(subject, new[] { "--foo:bar" });
-            }, "Argument '--foo' has an invalid value 'bar'");
-        }
-
-        [Test]
-        public void Missing_Required_Value_Should_Throw()
-        {
-            Assert.Throws<ConsoleUsageException>(() =>
-            {
-                var subject = new RequiredSubject();
-                CommandLineMapper.Map(subject, new string[] { });
-            }, "Expected argument '--foo', but was not received");
-        }
-
-        [Test]
-        public void Can_Map_Strings()
-        {
-            var subject = new StringsSubject();
-            CommandLineMapper.Map(subject, new[] { "--foo:bar", "--bar:baz" });
-            Assert.That(subject.Foo, Is.EqualTo("bar"));
-            Assert.That(subject.Bar, Is.EqualTo("baz"));
-            Assert.That(subject.Baz, Is.False);
-        }
-
-        [Test]
         public void Can_Map_Booleans_Switch_Or_Value()
         {
             var subject = new BooleansSubject();
-            CommandLineMapper.Map(subject, new[] { "--foo"});
+            CommandLineMapper.Map(subject, new[] { "--foo" });
             Assert.That(subject.Foo, Is.True);
             Assert.That(subject.Bar, Is.Null);
             Assert.That(subject.Baz, Is.False);
@@ -79,6 +45,23 @@ namespace NPlant.Tests.Console
             Assert.That(subject.Foo, Is.False);
             Assert.That(subject.Bar, Is.Null);
             Assert.That(subject.Baz, Is.False);
+        }
+
+        [Test]
+        public void Can_Map_Complex_Converters()
+        {
+            var subject = new ComplexConverterSubject();
+            CommandLineMapper.Map(subject, new[] { "--foo:Png" });
+
+            Assert.That(subject.Foo, Is.EqualTo(ImageFormat.Png));
+
+            CommandLineMapper.Map(subject, new[] { "--foo:Jpeg" });
+
+            Assert.That(subject.Foo, Is.EqualTo(ImageFormat.Jpeg));
+
+            CommandLineMapper.Map(subject, new[] { "--foo:gif" });
+
+            Assert.That(subject.Foo, Is.EqualTo(ImageFormat.Gif));
         }
 
         [Test]
@@ -102,48 +85,101 @@ namespace NPlant.Tests.Console
         }
 
         [Test]
-        public void Can_Map_Complex_Converters()
+        public void Can_Map_Strings()
         {
-            var subject = new ComplexConverterSubject();
-            CommandLineMapper.Map(subject, new []{"--foo:Png"});
-
-            Assert.That(subject.Foo, Is.EqualTo(ImageFormat.Png));
-
-            CommandLineMapper.Map(subject, new[] { "--foo:Jpeg" });
-
-            Assert.That(subject.Foo, Is.EqualTo(ImageFormat.Jpeg));
-
-            CommandLineMapper.Map(subject, new[] { "--foo:gif" });
-
-            Assert.That(subject.Foo, Is.EqualTo(ImageFormat.Gif));
+            var subject = new StringsSubject();
+            CommandLineMapper.Map(subject, new[] { "--foo:bar", "--bar:baz" });
+            Assert.That(subject.Foo, Is.EqualTo("bar"));
+            Assert.That(subject.Bar, Is.EqualTo("baz"));
+            Assert.That(subject.Baz, Is.False);
         }
 
-        public class StringsSubject
+        [TestCase("foo")]
+        [TestCase("foo:bar")]
+        [TestCase("-foo")]
+        [TestCase("-foo:bar")]
+        public void Invalid_Arg_Syntax_Should_Throw(string invalidArg)
         {
-            public string Foo { get; protected set; }
-            public string Bar { get; protected set; }
-            public bool Baz { get; protected set; }
+            Assert.Throws<ConsoleUsageException>(
+                () =>
+                {
+                    var subject = new StringsSubject();
+                    CommandLineMapper.Map(subject, new[] { invalidArg });
+                });
         }
+
+        [Test]
+        public void Invalid_Arg_Value_Should_Throw()
+        {
+            Assert.Throws<ConsoleUsageException>(
+                () =>
+                {
+                    var subject = new ComplexConverterSubject();
+                    CommandLineMapper.Map(subject, new[] { "--foo:bar" });
+                },
+                "Argument '--foo' has an invalid value 'bar'");
+        }
+
+        [Test]
+        public void Missing_Required_Value_Should_Throw()
+        {
+            Assert.Throws<ConsoleUsageException>(
+                () =>
+                {
+                    var subject = new RequiredSubject();
+                    CommandLineMapper.Map(subject, new string[] { });
+                },
+                "Expected argument '--foo', but was not received");
+        }
+
+        #endregion
 
         public class BooleansSubject
         {
-            public bool Foo { get; protected set; }
+            #region Public Properties
+
             public bool? Bar { get; protected set; }
+
             public bool Baz { get; protected set; }
+
+            public bool Foo { get; protected set; }
+
+            #endregion
+        }
+
+        public class ComplexConverterSubject
+        {
+            #region Public Properties
+
+            public ImageFormat Foo { get; protected set; }
+
+            #endregion
         }
 
         public class RequiredSubject
         {
-            [RequiredArgument]
-            public string Foo { get; protected set; }
+            #region Public Properties
+
             public string Bar { get; protected set; }
+
             public bool Baz { get; protected set; }
+
+            [RequiredArgument] public string Foo { get; protected set; }
+
+            #endregion
         }
 
-
-        public class ComplexConverterSubject
+        public class StringsSubject
         {
-            public ImageFormat Foo { get; protected set; }
+            #region Public Properties
+
+            public string Bar { get; protected set; }
+
+            public bool Baz { get; protected set; }
+
+            public string Foo { get; protected set; }
+
+            #endregion
         }
     }
 }

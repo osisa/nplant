@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using System.ServiceModel;
-using NPlant.Generation.ClassDiagraming;
+using NPlant.Generation.ClassDiagramming;
 using NPlant.MetaModel.ClassDiagraming;
 using NUnit.Framework;
 

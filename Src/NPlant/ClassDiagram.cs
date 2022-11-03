@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using NPlant.Core;
-using NPlant.Generation.ClassDiagraming;
+using NPlant.Generation.ClassDiagramming;
 using NPlant.MetaModel.ClassDiagraming;
 
 namespace NPlant

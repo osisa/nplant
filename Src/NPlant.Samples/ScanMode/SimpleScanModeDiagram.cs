@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using NPlant.Generation.ClassDiagraming;
+using NPlant.Generation.ClassDiagramming;
 
 namespace NPlant.Samples.ScanMode
 {

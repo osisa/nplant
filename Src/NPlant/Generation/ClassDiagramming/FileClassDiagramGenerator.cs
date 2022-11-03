@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace NPlant.Generation.ClassDiagraming
+namespace NPlant.Generation.ClassDiagramming
 {
     public class FileClassDiagramGenerator : ClassDiagramGenerator
     {

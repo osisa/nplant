@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using NPlant.Generation.ClassDiagraming;
+using NPlant.Generation.ClassDiagramming;
 
 namespace NPlant.Generation
 {

@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using NPlant.Core;
 using NPlant.Generation;
-using NPlant.Generation.ClassDiagraming;
+using NPlant.Generation.ClassDiagramming;
 
 namespace NPlant.UI.Screens.FileViews
 {

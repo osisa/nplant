@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NPlant.Generation.ClassDiagraming
+namespace NPlant.Generation.ClassDiagramming
 {
     public class ClassDiagramGeneration : IDisposable
     {

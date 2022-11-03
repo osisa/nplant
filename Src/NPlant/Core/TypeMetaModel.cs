@@ -1,16 +1,28 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="TypeMetaModel.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.Text;
-using NPlant.Generation.ClassDiagraming;
 
 namespace NPlant.Core
 {
     public class TypeMetaModel
     {
+        #region Fields
+
+        private readonly TypeNote _note = new TypeNote();
 
         private readonly Type _type;
+
         private bool _isPrimitive;
-        private readonly TypeNote _note = new TypeNote();
+
+        #endregion
+
+        #region Constructors and Destructors
 
         public TypeMetaModel(Type type)
         {
@@ -27,17 +39,25 @@ namespace NPlant.Core
             }
 
             this.Name = GetFriendlyDataType(type);
-            this.HideAsBaseClass = _type == typeof (object);
+            this.HideAsBaseClass = _type == typeof(object);
         }
 
-        private bool IsDefaultPrimitive()
-        {
-            return !_type.IsEnumerable() && _type.IsMsCoreLibType() && IsDefactoComplexType(_type);
-        }
+        #endregion
+
+        #region Public Properties
+
+        public bool Hidden { get; internal set; }
+
+        public bool HideAsBaseClass { get; internal set; }
+
+        public bool IsComplexType { get; internal set; }
 
         public bool IsPrimitive
         {
-            get { return _isPrimitive; }
+            get
+            {
+                return _isPrimitive;
+            }
             internal set
             {
                 _isPrimitive = value;
@@ -46,17 +66,21 @@ namespace NPlant.Core
             }
         }
 
-        public bool IsComplexType { get; internal set; }
-
         public string Name { get; internal set; }
 
-        public TypeNote Note { get { return _note; } }
-
-        public bool Hidden { get; internal set; }
-        
-        public bool HideAsBaseClass { get; internal set; }
+        public TypeNote Note
+        {
+            get
+            {
+                return _note;
+            }
+        }
 
         public bool TreatAllMembersAsPrimitives { get; internal set; }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         public static bool IsDefactoComplexType(Type type)
         {
@@ -69,13 +93,16 @@ namespace NPlant.Core
             return (type.IsClass || type.IsInterface || type.IsEnum);
         }
 
+        #endregion
+
+        #region Methods
+
         private static string GetFriendlyDataType(Type type)
         {
             if (type.IsGenericType)
             {
                 var def = type.GetGenericTypeDefinition();
                 var genericArguments = type.GetGenericArguments();
-
 
                 string outerName;
                 string innerName;
@@ -110,17 +137,37 @@ namespace NPlant.Core
 
             return type.Name;
         }
+
+        private bool IsDefaultPrimitive()
+        {
+            return !_type.IsEnumerable() && _type.IsMsCoreLibType() && IsDefactoComplexType(_type);
+        }
+
+        #endregion
     }
 
     public class TypeNote
     {
-        private NoteDirection _direction;
+        #region Fields
+
         private readonly List<string> _lines = new List<string>();
+
+        private NoteDirection _direction;
+
+        #endregion
+
+        #region Public Methods and Operators
 
         public TypeNote AddLine(string line)
         {
             _lines.Add(line);
 
+            return this;
+        }
+
+        public TypeNote DisplayBottom()
+        {
+            _direction = NoteDirection.bottom;
             return this;
         }
 
@@ -142,12 +189,6 @@ namespace NPlant.Core
             return this;
         }
 
-        public TypeNote DisplayBottom()
-        {
-            _direction = NoteDirection.bottom;
-            return this;
-        }
-
         public override string ToString()
         {
             if (_lines.Count > 0)
@@ -157,15 +198,20 @@ namespace NPlant.Core
 
             return string.Empty;
         }
+
+        #endregion
     }
 
     public enum NoteDirection
     {
-// ReSharper disable InconsistentNaming
+        // ReSharper disable InconsistentNaming
         left,
+
         right,
+
         top,
+
         bottom
-// ReSharper restore InconsistentNaming
+        // ReSharper restore InconsistentNaming
     }
 }

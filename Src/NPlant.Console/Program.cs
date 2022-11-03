@@ -1,29 +1,34 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright http://www.opensource.org file="Program.cs">
+//    (c) 2022. See license.txt in binary folder.
+// </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Reflection;
+
 using NPlant.Console.Exceptions;
 using NPlant.Core;
 using NPlant.Generation;
-using NPlant.Generation.ClassDiagraming;
-using Con=System.Console;
+using NPlant.Generation.ClassDiagramming;
+
+using Con = System.Console;
 
 namespace NPlant.Console
 {
-    class Program
+    public class Program
     {
-        static int Main(string[] args)
-        {
+        #region Methods
 
+        public static int Main(string[] args)
+        {
             try
             {
                 var arguments = new CommandLineArgs(args);
-
-                string jarPath = arguments.Jar;
+                var jarPath = arguments.Jar;
 
                 if (jarPath.IsNullOrEmpty())
                     jarPath = PlantUmlJarExtractor.TryExtractTo(ConsoleEnvironment.ExecutionDirectory);
@@ -35,35 +40,34 @@ namespace NPlant.Console
                 }
 
                 var assemblyLoader = new NPlantAssemblyLoader();
-                Assembly assembly = assemblyLoader.Load(arguments.Assembly);
+                var assembly = assemblyLoader.Load(arguments.Assembly);
 
                 var diagramLoader = new NPlantDiagramLoader();
-
                 var diagrams = diagramLoader.Load(assembly);
 
                 IEnumerable<DiscoveredDiagram> matchingDiagrams = diagrams;
 
-                if(! arguments.Diagram.IsNullOrEmpty())
+                if (!arguments.Diagram.IsNullOrEmpty())
                     matchingDiagrams = matchingDiagrams.Where(diagram => diagram.Diagram.Name.StartsWith(arguments.Diagram));
 
                 foreach (var matchingDiagram in matchingDiagrams)
                 {
-                    if (string.IsNullOrEmpty(arguments.Output))
+                    if (arguments.Output.IsNullOrEmpty())
                     {
-                        Con.WriteLine("    {0}", matchingDiagram.Diagram.Name);                        
+                        Con.WriteLine("    {0}", matchingDiagram.Diagram.Name);
                     }
                     else
                     {
-                        string diagramText = BufferedClassDiagramGenerator.GetDiagramText(matchingDiagram.Diagram);
-                        ImageFileGenerationModel model = new ImageFileGenerationModel(diagramText, matchingDiagram.Diagram.Name, arguments.Java, jarPath);
+                        var diagramText = BufferedClassDiagramGenerator.GetDiagramText(matchingDiagram.Diagram);
+                        var model = new ImageFileGenerationModel(diagramText, matchingDiagram.Diagram.Name, arguments.Java, jarPath);
 
-                        DirectoryInfo outputDirectory = new DirectoryInfo(arguments.Output);
+                        var outputDirectory = new DirectoryInfo(arguments.Output);
 
                         if (!outputDirectory.Exists)
                             outputDirectory.Create();
 
-                        string path = Path.Combine(outputDirectory.FullName, string.Format("{0}.{1}" ,model.DiagramName, arguments.Format));
-                        ImageFormat format = arguments.GetImageFormat();
+                        var path = Path.Combine(outputDirectory.FullName, $"{model.DiagramName}.{arguments.Format}");
+                        var format = arguments.GetImageFormat();
 
                         if (format == null)
                         {
@@ -71,8 +75,8 @@ namespace NPlant.Console
                         }
                         else
                         {
-                            NPlantImage nplantImage = new NPlantImage(model.JavaPath, model.Invocation);
-                            Image image = nplantImage.Create(model.DiagramText, model.DiagramName);
+                            var plantImage = new NPlantImage(model.JavaPath, model.Invocation);
+                            var image = plantImage.Create(model.DiagramText, model.DiagramName);
                             image.Save(path, format);
                         }
                     }
@@ -96,5 +100,7 @@ namespace NPlant.Console
 
             return 1;
         }
+
+        #endregion
     }
 }
