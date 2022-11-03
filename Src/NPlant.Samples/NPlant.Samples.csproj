@@ -1,16 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<LangVersion>10</LangVersion>
-		<NETCoreVersion>net6.0-windows</NETCoreVersion>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
+		
 		<TargetPlatform>AnyCPU</TargetPlatform>
-		<LibraryFramework>netstandard2.0</LibraryFramework>
-		<DefaultNetTargetFramework>net60</DefaultNetTargetFramework>
-		<DefaultNetTargetFrameworkVersion>v6.0</DefaultNetTargetFrameworkVersion>
+		
 	</PropertyGroup>
-	<ItemGroup>
+	<!--<ItemGroup>
 	  <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 	  <PackageReference Include="System.Core" Version="3.5.21022.801" />
 	  <PackageReference Include="System.Data.Common" Version="4.3.0" />
@@ -19,7 +14,7 @@
 	  <PackageReference Include="System.Runtime" Version="4.3.1" />
 	  <PackageReference Include="System.Xml.Linq" Version="3.5.21022.801" />
 	  <PackageReference Include="System.Xml.ReaderWriter" Version="4.3.1" />
-	</ItemGroup>
+	</ItemGroup>-->
 	<ItemGroup>
 	  <ProjectReference Include="..\NPlant.NAntTasks\NPlant.NAntTasks.csproj" />
 	  <ProjectReference Include="..\NPlant\NPlant.csproj" />

@@ -49,7 +49,7 @@
     
     <PackageVersion Condition=" '$(UseFullSemVerForNuGet)' == 'false' ">$(GitVersion_NuGetVersion)</PackageVersion>
     <PackageVersion Condition=" '$(UseFullSemVerForNuGet)' == 'true' ">$(GitVersion_FullSemVer)</PackageVersion>
-    <Nullable>enable</Nullable>
+    <!--<Nullable>enable</Nullable>-->
     <Version>$(FullSemVer)</Version>
     <IsNuke>true</IsNuke>
     <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>

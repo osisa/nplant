@@ -29,13 +29,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPlant.Console", "Src\NPlan
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{C501E137-AC6C-40AA-BB5A-5EF6D3A6B17F}"
 	ProjectSection(SolutionItems) = preProject
-		Directory.Build.props = Directory.Build.props
+		Src\Directory.Build.props = Src\Directory.Build.props
 		GitVersion.yml = GitVersion.yml
-		Package.Build.props = Package.Build.props
+		Src\Package.Build.props = Src\Package.Build.props
 		SolutionInfo.cs = SolutionInfo.cs
 		SolutionInfo.vb = SolutionInfo.vb
 		SolutionInfoTest.cs = SolutionInfoTest.cs
-		Test.Build.props = Test.Build.props
+		Src\Test.Build.props = Src\Test.Build.props
 	EndProjectSection
 EndProject
 Global
