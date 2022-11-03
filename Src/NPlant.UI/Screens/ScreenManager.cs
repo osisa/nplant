@@ -7,7 +7,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace NPlant.UI
+namespace NPlant.UI.Screens
 {
     public static class ScreenManager
     {

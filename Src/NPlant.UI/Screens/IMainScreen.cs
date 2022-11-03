@@ -4,7 +4,7 @@
 // </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace NPlant.UI
+namespace NPlant.UI.Screens
 {
     public interface IMainScreen
     {

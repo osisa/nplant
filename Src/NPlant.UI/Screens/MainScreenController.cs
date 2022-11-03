@@ -6,9 +6,7 @@
 
 using System;
 
-using NPlant.UI.Screens;
-
-namespace NPlant.UI
+namespace NPlant.UI.Screens
 {
     public class MainScreenController
     {
@@ -36,7 +34,7 @@ namespace NPlant.UI
         {
             if (result.UserApproved)
             {
-                this.OpenFile(result.FilePath);
+                OpenFile(result.FilePath);
             }
         }
 
@@ -50,7 +48,7 @@ namespace NPlant.UI
             EventDispatcher.Register<UserNotificationEvent>(LogUserNotificationToConsole);
         }
 
-        public void Stop(Action action)
+        public static void Stop(Action action)
         {
             action();
         }

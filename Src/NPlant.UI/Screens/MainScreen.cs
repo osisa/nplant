@@ -81,7 +81,7 @@ namespace NPlant.UI
 
         private void OnExitClick(object sender, EventArgs e)
         {
-            _controller.Stop(this.Close);
+            MainScreenController.Stop(this.Close);
         }
 
         private void OnAboutClick(object sender, EventArgs e)
