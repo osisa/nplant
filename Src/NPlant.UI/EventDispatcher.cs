@@ -41,9 +41,7 @@ namespace NPlant.UI
         {
             action.CheckForNullArg("action");
 
-            if (_actions == null)
-                _actions = new List<Delegate>();
-
+            _actions ??= new List<Delegate>();
             _actions.Add(action);
 
             return new EventDispatcherRegistration<T>(action);
@@ -55,10 +53,7 @@ namespace NPlant.UI
 
         private static void UnRegister<T>(Action<T> action)
         {
-            if (_actions == null)
-                return;
-
-            _actions.Remove(action);
+            _actions?.Remove(action);
         }
 
         #endregion

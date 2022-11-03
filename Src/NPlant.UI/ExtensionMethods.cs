@@ -17,8 +17,8 @@ public static class ExtensionMethods
     {
         var ext = Path.GetExtension(file);
 
-        if (string.Equals(ext, ".dll", StringComparison.InvariantCultureIgnoreCase)
-            || string.Equals(ext, ".exe", StringComparison.InvariantCultureIgnoreCase))
+        if (string.Equals(ext, ".dll", StringComparison.InvariantCultureIgnoreCase) ||
+            string.Equals(ext, ".exe", StringComparison.InvariantCultureIgnoreCase))
         {
             return true;
         }
