@@ -22,11 +22,11 @@ namespace NPlant.Tests.Diagramming
         #region Public Methods and Operators
 
         [TestCase(typeof(PublicMembersOnly), ClassDiagramScanModes.PublicMembersOnly, new string[] { "Foo" })]
-        [TestCase(typeof(AllMembers), ClassDiagramScanModes.AllMembers, new[] { "Foo", "Moo", "Bar", "Baz" })]
-        [TestCase(typeof(DataContractSubject), ClassDiagramScanModes.SystemServiceModelMember, new[] { "Foo", "Baz" })]
-        [TestCase(typeof(MessageContractSubject), ClassDiagramScanModes.SystemServiceModelMember, new[] { "Foo", "Baz" })]
-        [TestCase(typeof(FieldDataContractSubject), ClassDiagramScanModes.SystemServiceModelMember, new[] { "Foo", "Baz" })]
-        [TestCase(typeof(FieldMessageContractSubject), ClassDiagramScanModes.SystemServiceModelMember, new[] { "Foo", "Baz" })]
+        [TestCase(typeof(AllMembers), ClassDiagramScanModes.AllMembers, new[] { "Foo", "Baz", "Moo", "Bar" })]
+        [TestCase(typeof(DataContractSubject), ClassDiagramScanModes.SystemServiceModelMember, new[] { "Baz", "Foo" })]
+        [TestCase(typeof(MessageContractSubject), ClassDiagramScanModes.SystemServiceModelMember, new[] { "Baz", "Foo" })]
+        [TestCase(typeof(FieldDataContractSubject), ClassDiagramScanModes.SystemServiceModelMember, new[] { "Baz","Foo" })]
+        [TestCase(typeof(FieldMessageContractSubject), ClassDiagramScanModes.SystemServiceModelMember, new[] { "Baz", "Foo" })]
         [TestCase(typeof(FieldPropertyHybridDataContractSubject), ClassDiagramScanModes.SystemServiceModelMember, new[] { "Foo", "Baz" })]
         [TestCase(typeof(FieldPropertyHybridMessageContractSubject), ClassDiagramScanModes.SystemServiceModelMember, new[] { "Foo", "Baz" })]
         public void Scan_Suite(Type subjectType, ClassDiagramScanModes scanMode, string[] expectations)
@@ -37,7 +37,7 @@ namespace NPlant.Tests.Diagramming
                 descriptor.Visit();
                 Assert.That(descriptor.Members.Count, Is.EqualTo(expectations.Length));
 
-                for (int index = 0; index < expectations.Length; index++)
+                for (var index = 0; index < expectations.Length; index++)
                 {
                     Assert.That(descriptor.Members[index].Name, Is.EqualTo(expectations[index]));
                 }

@@ -24,9 +24,9 @@ namespace NPlant.Tests.Diagrams.ClassDiagrams
             Assert.That(simulation.Classes.Count, Is.EqualTo(1));
             Assert.That(simulation.Classes[0].Name, Is.EqualTo("SimpleEntity"));
             Assert.That(simulation.Classes[0].Members.Count, Is.EqualTo(3));
-            Assert.That(simulation.Classes[0].Members[0].Key, Is.EqualTo("Foo"));
-            Assert.That(simulation.Classes[0].Members[1].Key, Is.EqualTo("Bar"));
-            Assert.That(simulation.Classes[0].Members[2].Key, Is.EqualTo("Baz"));
+            Assert.That(simulation.Classes[0].Members[0].Key, Is.EqualTo("Bar"));
+            Assert.That(simulation.Classes[0].Members[1].Key, Is.EqualTo("Baz"));
+            Assert.That(simulation.Classes[0].Members[2].Key, Is.EqualTo("Foo"));
         }
 
         [Test]
@@ -38,11 +38,11 @@ namespace NPlant.Tests.Diagrams.ClassDiagrams
             Assert.That(simulation.Classes.Count, Is.EqualTo(1));
             Assert.That(simulation.Classes[0].Name, Is.EqualTo("SimpleEntity"));
             Assert.That(simulation.Classes[0].Members.Count, Is.EqualTo(3));
-            Assert.That(simulation.Classes[0].Members[0].Key, Is.EqualTo("Foo"));
-            Assert.That(simulation.Classes[0].Members[0].IsHidden, Is.False);
-            Assert.That(simulation.Classes[0].Members[1].Key, Is.EqualTo("Bar"));
-            Assert.That(simulation.Classes[0].Members[1].IsHidden, Is.True);
-            Assert.That(simulation.Classes[0].Members[2].Key, Is.EqualTo("Baz"));
+            Assert.That(simulation.Classes[0].Members[0].Key, Is.EqualTo("Bar"));
+            Assert.That(simulation.Classes[0].Members[0].IsHidden, Is.True);
+            Assert.That(simulation.Classes[0].Members[1].Key, Is.EqualTo("Baz"));
+            Assert.That(simulation.Classes[0].Members[1].IsHidden, Is.False);
+            Assert.That(simulation.Classes[0].Members[2].Key, Is.EqualTo("Foo"));
             Assert.That(simulation.Classes[0].Members[2].IsHidden, Is.False);
         }
 
