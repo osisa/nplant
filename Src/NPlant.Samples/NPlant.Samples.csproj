@@ -18,6 +18,8 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\NPlant.NAntTasks\NPlant.NAntTasks.csproj" />
 	  <ProjectReference Include="..\NPlant\NPlant.csproj" />
+
+	  <PackageReference Include="PlantUml.Net" Version="1.4.80" />
 	</ItemGroup>
 
 </Project>

@@ -4,9 +4,11 @@
 // </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-using NPlant.UI;
+using System.IO;
+using System.Text;
 
 using NUnit.Framework;
+using PlantUml.Net;
 
 namespace NPlant.Tests.UI
 {
@@ -16,12 +18,29 @@ namespace NPlant.Tests.UI
         #region Public Methods and Operators
 
         [Test]
-        public void Can_Load_Dll_File_Path()
+        public void TryCreatePng()
         {
-            var args = CommandLineArguments.Load(new[] { "Foo.dll" });
-            Assert.That(args.FilePath, Is.EqualTo("Foo.dll"));
-            Assert.That(args.FilePath.IsNPlantFilePath(), Is.False);
-            Assert.That(args.FilePath.IsAssemblyFilePath(), Is.True);
+            var factory = new RendererFactory();
+            var renderer = factory.CreateRenderer(new PlantUmlSettings());
+
+            var bytes = renderer.RenderAsync("Bob -> Alice : Hello", OutputFormat.Png).Result;
+            File.WriteAllBytes(@"c:\png\out.png", bytes);
+        }
+
+        [Test]
+        public void SomeSystem()
+        {
+            var factory = new RendererFactory();
+            var settings = new PlantUmlSettings();
+            settings.RenderingMode = RenderingMode.Local;
+            var renderer = factory.CreateRenderer(settings);
+            
+            var txt = new StringBuilder();
+            txt.AppendLine("skin rose");
+            txt.AppendLine("nBob -> Alice : Hello");
+
+            var bytes = renderer.RenderAsync(txt.ToString(), OutputFormat.Png).Result;
+            File.WriteAllBytes(@"c:\png\SomeSystem.png", bytes);
         }
 
         #endregion
